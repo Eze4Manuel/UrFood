@@ -1,0 +1,24 @@
+.action-bar__ctn {
+    position: absolute;
+    left: 300px;
+    margin-bottom: 30px;
+    z-index: 400;
+}
+
+.action-bar__items {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.action-bar__btn {
+    width: 100px;
+    height: 35px;
+    background: red;
+    color: #fff;
+    padding-left: 10px;
+    border: none;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    margin-left: 15px;
+}

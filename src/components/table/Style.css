@@ -1,0 +1,13 @@
+.app-table__header {
+    background: #343a40;
+    color: #fff;
+}
+
+.table-effect:hover {
+    cursor: pointer !important;
+}
+
+.table-header-container {
+    display: flex;
+    justify-content: space-between;
+}

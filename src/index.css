@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:wght@200,300;400;500;600;&display=swap');
+
+:root {
+    --color-main: #011b33;
+}
+
+*,*::before,*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+    font-family: 'Open sans' sans-serif 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS';
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style-type: none;
+}
+
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+  background:transparent;
+}
+
+/* Dashboard Sections */
+
+main {
+  padding-bottom: 1.5rem;
+  background: #fbfbfb;
+  min-height: calc(100vh - 70px);
+  width: 100%;
+}
+
+/* Utilities */
+
+.btn-sm {
+  min-width: 50px !important;
+  outline: none;
+}
+
+.w-1 {
+  width: 25%;
+}
+
+.w-2 {
+  width: 30%;
+}
+
+.w-3 {
+  width: 50%;
+}
+
+.w-4 {
+  width: 60%;
+}
+
+.w-5 {
+  width: 75%;
+}
+
+.w-6 {
+  width: 90%;
+}
+
+.w-7 {
+  width: 100%;
+}
+
+.white {
+  background: #fff;
+}
+
+
+.flex-items-between {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Global styles */
+.no-file {
+  margin-top: 5rem;
+  font-size: 75px;
+  color: #28a745;
+}
+
+.go-back-arrow {
+  font-size: 35px;
+}

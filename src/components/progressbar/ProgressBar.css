@@ -1,0 +1,6 @@
+.progress-bar__size {
+    /* style={{height: "10px", width: "300px"}} */
+    height: 10px !important;
+    width: 100%;
+    max-width: 300px !important;
+}

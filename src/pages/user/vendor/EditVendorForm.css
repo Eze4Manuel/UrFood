@@ -1,0 +1,7 @@
+.password-update__btn-ctn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-top: 10px;
+}

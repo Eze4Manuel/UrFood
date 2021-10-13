@@ -46,7 +46,6 @@ const Navbar = (props) => {
                                 <div className="hr"/>
                             </Fragment>
                         ) 
-
                     }
                     <Link className="navbar-dropdown-link link-flex" onClick={() => handleUserLogout()}>
                         <span className="las la-sign-out-alt icon_hover pr-2"></span>Logout

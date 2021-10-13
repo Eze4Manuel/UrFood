@@ -19,6 +19,7 @@ const config = {
         {
             divider: 'services',
             sub: [
+                {name: 'transactions', icon: 'las la-store-alt', link: conf.pages.transaction},
                 {name: 'dispatch', icon: 'las la-store-alt', link: conf.pages.order},
                 {name: 'food', icon: 'las la-utensils', link: conf.pages.food},
             ]

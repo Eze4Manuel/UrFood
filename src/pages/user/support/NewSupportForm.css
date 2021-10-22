@@ -1,0 +1,8 @@
+.p-password input {
+    width: 250px;
+}
+
+.user-form__button-wp {
+    display: flex;
+    flex-direction: row-reverse;
+}

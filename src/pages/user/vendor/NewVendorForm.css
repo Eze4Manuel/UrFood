@@ -1,0 +1,8 @@
+.p-password input {
+    width: 250px;
+}
+
+.partner-form__button-wp {
+    display: flex;
+    flex-direction: row-reverse;
+}

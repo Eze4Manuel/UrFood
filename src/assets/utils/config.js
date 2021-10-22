@@ -18,6 +18,7 @@ const config = {
         food: '/food',
         settings: '/settings',
         support: '/supports',
+        transaction: '/transaction',
         logout: '/logout',
     },
     key: {

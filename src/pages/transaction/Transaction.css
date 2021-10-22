@@ -1,0 +1,6 @@
+.transaction-table__container {
+    position: absolute;
+    left: 255px;
+    width: 80%;
+    overflow: hidden;
+}

@@ -1,0 +1,18 @@
+.product-summary__ctn {
+    background: #fbfbfb;
+}
+.p-inputtext{
+    padding: 0px 5px;
+    font-size: 13px;
+}
+.p-button-edit, .p-button-update{
+    padding: 0px 5px;
+
+}
+.shape-xs {
+    width: 10px;
+    height: 10px;
+}
+.pc-line {
+    line-height: 1.3;
+}

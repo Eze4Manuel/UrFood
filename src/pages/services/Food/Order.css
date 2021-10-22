@@ -1,0 +1,6 @@
+.order-table__container {
+    left: 255px;
+    width: 80%;
+    overflow: hidden;
+    position: absolute;
+}

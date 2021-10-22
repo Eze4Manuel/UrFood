@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Dashboard.css';
 import NavigationBar from '../../components/navigation/Navbar';
 import DashboardCard from '../../components/dashboardhelps/DashboardCard';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
 
-import lib from './lib';
-import { useAuth } from '../../core/hooks/useAuth';
-import helpers from '../../core/func/Helpers';
+// import lib from './lib';
+// import { useAuth } from '../../core/hooks/useAuth';
+// import helpers from '../../core/func/Helpers';
 import { ContainerLoader } from '../../components/loading/Loading';
 import { fShortenNumber } from '../../assets/utils/formatNumber';
 
 
 const Dashboard = (props) => {
 
-    const { set, user } = useAuth();
-    const [loader, setLoader] = useState(false);
-    const [page,] = useState(1);
-    const [totalUsers, setTotalUsers] = useState(1);
-    const [userTypes, setUserTypes] = useState([]);
-    const [totalTransactions, setTotalTransaction] = useState([]);
-    const [revenueFor6Months, setRevenueFor6Months] = useState([]);
-    const [, setRevenueByArea] = useState([]);
-    const [revenueByMonth, setRevenueByMonth] = useState({});
-    const [, setTotalCustomerRevenue] = useState([]);
-    const [totalPharmacyRevenue, setTotalPharmacyRevenue] = useState({});
-    const [, setOrderCount] = useState([]);
-    const [, setOrderStatus] = useState({});
-    const [orderArea, setOrderArea] = useState([]);
-    const [orderMonth, setOrderMonth] = useState([]);
+    // const { set, user } = useAuth();
+    const [loader, ] = useState(false);
+    // const [page,] = useState(1);
+    const [totalUsers, ] = useState(1);
+    const [userTypes, ] = useState([]);
+    const [totalTransactions, ] = useState([]);
+    const [revenueFor6Months, ] = useState([]);
+    // const [, setRevenueByArea] = useState([]);
+    const [revenueByMonth, ] = useState({});
+    // const [, setTotalCustomerRevenue] = useState([]);
+    const [totalPharmacyRevenue, ] = useState({});
+    // const [, setOrderCount] = useState([]);
+    // const [, setOrderStatus] = useState({});
+    const [orderArea, ] = useState([]);
+    const [orderMonth, ] = useState([]);
 
-    const currentYear = new Date().getFullYear();
+    // const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
 
     // // Getting Transaction summary by type
@@ -170,19 +170,19 @@ const Dashboard = (props) => {
 
 
 
-    const mapStatus = (res) => {
-        let obj = {
-            active: 0,
-            cancelled: 0,
-            fulfilled: 0,
-            pending: 0
-        }
-        res.forEach(e => {
-            obj[`${e._id}`] = e.total
-        })
-        setOrderStatus(obj);
-        return
-    }
+    // const mapStatus = (res) => {
+    //     let obj = {
+    //         active: 0,
+    //         cancelled: 0,
+    //         fulfilled: 0,
+    //         pending: 0
+    //     }
+    //     res.forEach(e => {
+    //         obj[`${e._id}`] = e.total
+    //     })
+    //     setOrderStatus(obj);
+    //     return
+    // }
 
 
 

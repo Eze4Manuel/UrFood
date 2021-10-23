@@ -38,13 +38,13 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="first_name">First Name</label><br />
-                            <InputText style={{ width: '100%' }} id="first_name" name="first_name" onChange={e => setValues(d => ({ ...d, first_name: e.target.value }))} autoFocus value={values.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="fist name" />
+                            <label htmlFor="first_name">First Name*</label><br />
+                            <InputText style={{ width: '100%' }} id="first_name" name="first_name" onChange={e => setValues(d => ({ ...d, first_name: e.target.value }))} autoFocus value={values.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="first name" />
                         </div>
                     </div>
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="last_name">Last Name</label><br />
+                            <label htmlFor="last_name">Last Name*</label><br />
                             <InputText style={{ width: '100%' }} id="last_name" name="last_name" type="text" onChange={e => setValues(d => ({ ...d, last_name: e.target.value }))} value={values.last_name} className="p-inputtext-sm p-d-block p-mb-2" placeholder="last name" />
                         </div>
                     </div>
@@ -52,7 +52,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="email">Email</label><br />
+                            <label htmlFor="email">Email*</label><br />
                             <InputText style={{ width: '100%' }} id="email" name="email" onChange={e => setValues(d => ({ ...d, email: e.target.value }))} autoFocus value={values.email} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="email" />
                         </div>
                     </div>
@@ -60,7 +60,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-1">
-                            <label htmlFor="phone_number">Phone number</label><br />
+                            <label htmlFor="phone_number">Phone number*</label><br />
                             <InputText style={{ width: '100%' }} id="phone_number" name="phone_number" onChange={e => setValues(d => ({ ...d, phone_number: e.target.value }))} value={values.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="080*********" />
                         </div>
                     </div>
@@ -80,22 +80,17 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                     </div>
                 </div>
                 <div className="row">
+                    
                     <div className="col-lg-6">
                         <div className="p-field mb-1">
-                            <label htmlFor="username">Username*</label><br />
-                            <InputText style={{ width: '100%' }} id="username" name="username" onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values.username} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username" />
-                        </div>
-                    </div>
-                    <div className="col-lg-6">
-                        <div className="p-field mb-1">
-                            <label htmlFor="last_name">New Password*</label><br />
-                            <Password footer={footer} minLength={6} maxLength={24} id="password" name="password" type="text" onChange={e => setValues(d => ({ ...d, password: e.target.value }))} value={values.password} className="p-inputtext-sm" placeholder="new password" toggleMask />
+                            <label htmlFor="password">Password*</label><br />
+                            <Password footer={footer} minLength={6} maxLength={24} id="password" name="password" type="text" onChange={e => setValues(d => ({ ...d, password: e.target.value }))} value={values.password} className="p-inputtext-sm" placeholder="password" toggleMask />
                         </div>
                     </div>
                 </div>
 
                 <div className="user-form__button-wp">
-                    <Button onClick={() => props.onSubmit({ ...values, user_type: 'admin' }, setLoading, setError, setValues, config.userData)} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
+                    <Button onClick={() => props.onSubmit({ ...values, user_type: 'attendant' }, setLoading, setError, setValues, config.userData)} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
                 </div>
             </div>
         </Dialog>

@@ -1,79 +1,27 @@
 const formValidator = {}
-
-// validate pharmacy form
-formValidator.validateContactPersonDetails = (form, values, builder, setError) => {
-   setError("")
-
-   //validate the phone
-   if (form.phone_number !== values.contact_phone_number) {
-      if (!form.phone_number) {
-         return setError("Contact person phone number is required")
-      }
-      if (!/^[0-9]+$/.test(form.phone_number)) {
-         return setError("Contact person phone number should be digits only")
-      }
-      if (!/^0/.test(form.phone_number)) {
-         return setError("Contact person phone number must start with zero. e.g (070........)")
-      }
-      if (form.phone_number.length !== 11) {
-         return setError("Invalid contact person phone number. Contact person phone number expects 11 digits")
-      }
-      builder.contact_phone_number = form.phone_number
-   }
-
-   //validate the email
-   if (form.email !== values.contact_email) {
-      if (!form.email) {
-         return setError("Contact person email is required")
-      }
-      builder.contact_email = form.email
-   }
-
-   if (Object.keys(builder).length === 0) {
-      return setError("No changes to update")
-   }
-
-   // return payload
-   return builder
-}
+ 
 
 
  
 // validate Partner form
-formValidator.validatePartnerUpdate = (form, values, builder, data, setError) => {
+formValidator.validateVendorUpdate = (form, values, builder, data, setError) => {
    setError("")
-
-   //check organization name
-   if (form.organization !== values.organization) {
-      if (!form.organization) {
-         return setError("Organization name is required")
-      }
-      if (form.organization.length < 5) {
-         return setError("Organization name is too short")
-      }
-      if (form.organization.length > 100) {
-         return setError("Organization name is too long")
-      }
-      builder.organization = form.organization
-   }
-
 
    //validate the phone
    if (form.phone_number !== values.phone_number) {
       if (!form.phone_number) {
-         return setError("Pharmacy phone number is required")
+         return setError("vendor phone number is required")
       }
       if (!/^[0-9]+$/.test(form.phone_number)) {
-         return setError("Pharmacy Phone number should be digits only")
+         return setError("vendor Phone number should be digits only")
       }
       if (!/^0/.test(form.phone_number)) {
-         return setError("Pharmacy Phone number must start with zero. e.g (070........)")
+         return setError("vendor Phone number must start with zero. e.g (070........)")
       }
       if (form.phone_number.length !== 11) {
-         return setError("Invalid pharmacy phone number. Pharmacy phone number expects 11 digits")
+         return setError("Invalid vendor phone number.  phone number expects 11 digits")
       }
-      builder.partner_data = [{ ...data.partner_data[0], phone_number: form.phone_number }]
-
+      builder.phone_number = form.phone_number
    }
 
    //validate the email
@@ -81,30 +29,29 @@ formValidator.validatePartnerUpdate = (form, values, builder, data, setError) =>
       if (!form.email) {
          return setError("Email is required")
       }
-      builder.partner_data = [{ ...data.partner_data[0], email: form.email }]
-
+      builder.email = form.email
    }
 
-   // if branch
-   if (form.branch !== values.branch) {
-      if (!form.branch) {
-         return setError("Branch name is required")
+   // if registration_id
+   if (form.registration_id !== values.registration_id) {
+      if (!form.registration_id) {
+         return setError("CAC Number is required")
       }
-      if (form.branch.length > 20) {
-         return setError("Branch name to long")
+      if (form.registration_id.length > 20) {
+         return setError("CAC Number to long")
       }
-      builder.branch = form.branch
+      builder.registration_id = form.registration_id
    }
 
-   // if username
-   if (form.username !== values.username) {
-      if (!form.username) {
-         return setError("Username name is required")
+   // if vendor_name
+   if (form.vendor_name !== values.vendor_name) {
+      if (!form.vendor_name) {
+         return setError("Vendor name is required")
       }
-      if (form.username.length > 20) {
-         return setError("Username name to long")
+      if (form.vendor_name.length > 20) {
+         return setError("Vendor name to long")
       }
-      builder.username = form.username
+      builder.vendor_name = form.vendor_name
    }
 
    //check if home area
@@ -113,18 +60,29 @@ formValidator.validatePartnerUpdate = (form, values, builder, data, setError) =>
          return setError("Area is required")
       }
       if (!/^[\w\s\-',]+$/i.test(form.area)) {
-         return setError("No special character allowed for home area")
+         return setError("No special character allowed for vendor area")
       }
       builder.area = form.area
+   }
+
+   //check if home area
+   if (form.city !== values.city) {
+      if (!form.city) {
+         return setError("City is required")
+      }
+      if (!/^[\w\s\-',]+$/i.test(form.city)) {
+         return setError("No special character allowed for city")
+      }
+      builder.city = form.city
    }
 
    // check if home address
    if (form.address !== values.address) {
       if (!form.address) {
-         return setError("Address is required")
+         return setError("Address is required");
       }
       if (!/^[\w\s\-\\]+$/i.test(form.address)) {
-         return setError("No special character allowed for pharmacy address")
+         return setError("No special character allowed for vendor address")
       }
       builder.address = form.address
    }
@@ -132,39 +90,39 @@ formValidator.validatePartnerUpdate = (form, values, builder, data, setError) =>
       return setError("No changes to update")
    }
 
+
    // return payload
    return builder
 }
 
 
 
-// validate pharmacy form
-formValidator.validateNewPartner = (form, builder, setError) => {
+// validate vendor form
+formValidator.validateNewVendor = (form, builder, setError) => {
    setError("")
-   // validate organization name
-   if (!form.organization) {
-      return setError("Organization Name is required")
+   // validate first_name name
+   if (!form.first_name) {
+      return setError("First Name is required")
    }
-   if (form.organization < 2) {
-      return setError("Organization Name is too short")
+   if (form.first_name < 2) {
+      return setError("First Name is too short")
    }
-   if (form.organization.length > 45) {
-      return setError("Organization Name is too long")
+   if (form.first_name.length > 45) {
+      return setError("First Name is too long")
    }
-   builder.organization = form.organization
+   builder.first_name = form.first_name
 
   
-
-   if (!form.branch) {
-      return setError("Branch is required")
+   if (!form.last_name) {
+      return setError("Last Name is required")
    }
-   if (form.branch.length < 2) {
-      return setError("Branch is too short")
+   if (form.last_name.length < 2) {
+      return setError("Last Name is too short")
    }
-   if (form.branch.length > 45) {
-      return setError("Branch is too long")
+   if (form.last_name.length > 45) {
+      return setError("Last Name is too long")
    }
-   builder.branch = form.branch
+   builder.last_name = form.last_name
 
    //validate the email
    if (!form.email) {
@@ -173,10 +131,10 @@ formValidator.validateNewPartner = (form, builder, setError) => {
    builder.email = form.email
 
    //validate the username
-   if (!form.username) {
-      return setError("Username is required")
+   if (!form.vendor_name) {
+      return setError("Vendor Name is required")
    }
-   builder.username = form.username
+   builder.vendor_name = form.vendor_name
 
    //validate the phone
    if (!form.phone_number) {
@@ -226,6 +184,19 @@ formValidator.validateNewPartner = (form, builder, setError) => {
    }
    builder.area = form.area
 
+   //check if City
+   if (!form.city) {
+      return setError("City is required")
+   }
+   builder.city = form.city
+
+
+    //check if registration_id
+    if (!form.registration_id) {
+      return setError("CAC No. is required")
+   }
+   builder.registration_id = form.registration_id
+
    // check if Address
    if (!form.address) {
       return setError("Address is required")
@@ -236,7 +207,7 @@ formValidator.validateNewPartner = (form, builder, setError) => {
    builder.address = form.address
 
    // set user type
-   builder.user_type = "partner"
+   builder.user_type = "vendor"
 
    // return payload
    return builder

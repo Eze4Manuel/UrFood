@@ -3,8 +3,8 @@ import './VendorUserData.css';
 import { Dialog } from 'primereact/dialog';
 import config from '../../../assets/utils/config';
 import { EditPassword } from './EditVendorForm';
-import PartnerUserDetail from './VendorUserDetail';
-import EditPharmacy from './EditVendor';
+import VendorUserDetail from './VendorUserDetail';
+import EditVendor from './EditVendor';
 import Flash from '../../../components/flash/Flash';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
@@ -15,7 +15,7 @@ import { useNotifications } from '@mantine/notifications';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated }) => {
+const VendorUserData = ({ data, show, onHide, onDeleted, onUpdated }) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
@@ -68,7 +68,7 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated }) => {
         if (reqData.status === 'ok') {
             onDeleted(data?.auth_id)
             onHide()
-            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'pharmacy record deleted' })
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Vendor deleted' })
         }
     }
 
@@ -91,12 +91,12 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated }) => {
                         <div className="partner-form__button-wp">
                             {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
                         </div>
-                        <PartnerUserDetail data={values} />
+                        <VendorUserDetail data={values} />
                     </div>
                     <div className="col-5">
                         
-                        {/* EDIT PARTNER PROFILE */}
-                        <EditPharmacy onUpdated={(data) => setValues(data)} onHide={() => onCancelProfileEdit()} data={values} show={showPartner} />
+                        {/* EDIT Vendor PROFILE */}
+                        <EditVendor onUpdated={(data) => setValues(data)} onHide={() => onCancelProfileEdit()} data={values} show={showPartner} />
                         {/* EDIT PASSWORD */}
                         <EditPassword onHide={() => onCancelPasswordEdit()} data={values} show={showPassword} />
                     </div>
@@ -106,4 +106,4 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated }) => {
     )
 }
 
-export default PartnerUserData
+export default VendorUserData

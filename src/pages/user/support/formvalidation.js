@@ -43,14 +43,6 @@ formValidator.validateNewSupport = (form, builder, setError) => {
     if (form.address) {
        builder.address = form.address
     }
-
-    //check if home area
-    if (!form.username) {
-        return setError("password is required")
-    }
-    builder.username = form.username
-
-  
     //check the password
     if (!form.password) {
        return setError("password is required")

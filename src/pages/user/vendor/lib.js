@@ -31,7 +31,7 @@ lib.getOne = async (id, token) => {
 lib.create = async (values, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        return await (await request.post('/auth/register', values, cfg)).data 
+        return await (await request.post('/auth/admin', values, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
@@ -40,7 +40,7 @@ lib.create = async (values, token) => {
 lib.updatePassword = async (data, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        return await (await request.put('/auth/admin-update-password', data, cfg)).data 
+        return await (await request.post('/auth/admin-password-reset', data, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
@@ -55,10 +55,10 @@ lib.update = async (id, data, token) => {
     }
 }
 
-lib.updatePharmacy = async (id, data, token) => {
+lib.updateVendor = async (data, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
-        return await (await request.put(`/auth/admin/${id}`, data, cfg)).data 
+        return await (await request.put(`/auth/admin-update-vendor`, data, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
@@ -67,7 +67,7 @@ lib.updatePharmacy = async (id, data, token) => {
 lib.delete = async (id, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        return await (await request.delete(`/auth/admin/${id}`, cfg)).data 
+        return await (await request.delete(`/auth/vendor/${id}`, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }

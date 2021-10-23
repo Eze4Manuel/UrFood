@@ -2,8 +2,9 @@ const formValidator = {}
 
 formValidator.validateLicenseUpdate = (values, data, builder, setError) => {
    setError("")
+
    // check vehicle ID
-   if (values.vehicle_id !== data.vehicle_id) {
+   if (values?.vehicle_id !== data.vehicle_id) {
       if (values.vehicle_id.length === 0) {
          return setError("Vehicle ID is required")
       }
@@ -16,7 +17,7 @@ formValidator.validateLicenseUpdate = (values, data, builder, setError) => {
       builder.vehicle_id = values.vehicle_id
    }
    // check dispatcher license ID
-   if (values.license_id !== data.license_id) {
+   if (values?.license_id !== data.license_id) {
       if (values.license_id.length === 0) {
          return setError("License ID is required")
       }
@@ -28,6 +29,7 @@ formValidator.validateLicenseUpdate = (values, data, builder, setError) => {
       }
       builder.license_id = values.license_id
    }
+
    if (values.vehicle_type !== data.vehicle_type) {
       // check vehicle type 
       if (!values.vehicle_type) {
@@ -99,13 +101,17 @@ formValidator.validateDataUpdate = (values, data, builder, setError) => {
       }
       builder.username = values.username
    }
-   
 
    if (Object.keys(builder).length === 0) {
       return setError("No changes to update")
    }
    return builder
 }
+
+
+
+
+
 
 // validate user form
 formValidator.validateNewDispatcher = (form, builder, setError) => {

@@ -41,7 +41,7 @@ const processor = (d) => {
         city: pd?.city,
         address: pd?.address,
         ...d,
-        vendor_id: pd?._id,
+        vendor_id: pd?._id
     }
 }
 

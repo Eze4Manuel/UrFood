@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './dispatcher.css';
 import NoData from '../../../components/widgets/NoData';
 import SubNavbar from '../../../components/subnavbar/index';
@@ -42,21 +42,20 @@ const Dispatcher = (props) => {
         })
     }
 
-    // // data 
-    // useEffect(() => {
-    //     (async () => {
-    //         setLoader(true)
-    //         let reqData = await lib.get(page, null, user?.token)
-    //         if (reqData.status === "error") {
-    //             helpers.sessionHasExpired(set, reqData.msg)
-    //         }
-    //         if (reqData.status === 'ok') {
-    //             setData(reqData.data);
-    //         }
-    //         setLoader(false);
-    //         console.log(reqData);
-    //     })()
-    // }, [user?.token, page, set])
+    // data 
+    useEffect(() => {
+        (async () => {
+            setLoader(true)
+            let reqData = await lib.get(page, null, user?.token)
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
+            if (reqData.status === 'ok') {
+                setData(reqData.data);
+            }
+            setLoader(false);
+        })()
+    }, [user?.token, page, set])
 
     // setup table data
     const perPage = getPageCount(10);
@@ -90,14 +89,14 @@ const Dispatcher = (props) => {
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
         setLoading(true)
-        let reqData = await lib.create(values, user?.token)
+        let reqData = await lib.create(values, user?.token, )
         setLoading(false)
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg, setError)
         }
         if (reqData.status === "ok") {
             setValues(resetData)
-            // setOpenForm(false)
+            setOpenForm(false)
             setData([reqData.data, ...data])
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Dispatcher created' })
         }
@@ -169,8 +168,8 @@ const Dispatcher = (props) => {
                                     perPage={perPage}
                                     route="" // {config.pages.user}
                                     tableTitle="Dispatcher"
-                                    tableHeader={['#', 'username', 'First Name', 'Last Name', 'Phone']}
-                                    dataFields={['username', 'first_name', 'last_name', 'phone_number']}
+                                    tableHeader={['#', 'ID', 'First Name', 'Last Name', 'Phone']}
+                                    dataFields={['_id', 'first_name', 'last_name', 'phone_number']}
                                 />
                             )
                             : null

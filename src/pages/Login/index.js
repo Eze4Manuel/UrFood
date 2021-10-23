@@ -3,7 +3,7 @@ import './login.css';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-// import request from '../../assets/utils/http-request';  
+import request from '../../assets/utils/http-request';  
 import { useAuth } from '../../core/hooks/useAuth';
 import ErrorMessage from '../../components/error/ErrorMessage'
 import Helpers from '../../core/func/Helpers';
@@ -16,12 +16,12 @@ const Login = (props) => {
 
     const onSubmit = async (e) => {
         let userData = {}
-        // check username
-        if (!values.username) {
-            setError('username is required')
+        // check phone_number
+        if (!values.phone_number) {
+            setError('phone number is required')
             return
         }
-        userData.username = values.username
+        userData.phone_number = values.phone_number
         
         // check password
         if (!values.password) {
@@ -30,21 +30,28 @@ const Login = (props) => {
         }
         userData.password = values.password
         // set user type
-        let userType = values.username.toLowerCase() === 'urdispatch' ? 'superadmin' : 'admin'
+        let userType = values.phone_number.toLowerCase() === '08111111111' ? 'superadmin' : 'admin'
         userData.user_type = userType
-
-        const fauth = async () => {
-            setError('')
-            setLoading(true) 
-            setTimeout(() => {
-                let fakeUser  = {email: "superadmin@urfood.ng", access_level: 4, phone_number: "08122334455", user_type: "superadmin", auth_id: "5656ghs3387383738hh"}
-                setLoading(false) 
-                Helpers.loadUserInStore(fakeUser)
-                set(fakeUser)
-            }, 3000)
+        
+        setError('')
+        setLoading(true)
+        try {
+            let reqData = await (await request.post('/auth/login', userData)).data
+            setLoading(false)
+            console.log(reqData);
+            if (reqData.status === 'error') {
+                setError(reqData?.msg)
+            }
+            if (reqData.status === 'ok' && ['admin', 'superadmin'].indexOf(reqData?.data?.user_type) === -1) {
+                setError("You do not have the right authorization for this resource")
+            } else {
+                Helpers.loadUserInStore(reqData?.data)
+                set(reqData?.data)
+            }
+        } catch (err) {
+            setLoading(false)
+            setError(err?.response?.data?.msg || err?.message)
         }
-        //TODO: Replace
-        await fauth()
     };
 
     return (
@@ -60,8 +67,8 @@ const Login = (props) => {
                             <div className="row">
                                     <div className="col-lg-12">
                                         <div className="p-field mb-2">
-                                            <label htmlFor="username">Username</label><br />
-                                            <InputText style={{width: '100%'}} id="username" name="username" onChange={e => setValues(d => ({...d, username: e.target.value}))} autoFocus value={values.username} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username" />
+                                            <label htmlFor="phone_number">Phone Number</label><br />
+                                            <InputText style={{width: '100%'}} id="phone_number" name="phone_number" onChange={e => setValues(d => ({...d, phone_number: e.target.value}))} autoFocus value={values.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="phone_number" />
                                         </div>
                                     </div>
                                     <div className="col-lg-12">

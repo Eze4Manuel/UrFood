@@ -29,6 +29,7 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
         setLoading(false)
         onHide()
     }
+    
     const vehicles = [
         {label: 'Car', value: 'car'},
         {label: 'Bus', value: 'bus'},
@@ -42,8 +43,9 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
         if (!builder) {
             return
         }
+        
         // update
-        let reqData = await lib.updateLicense(data?._id, builder, user?.token)
+        let reqData = await lib.updateLicense(data?.dispatcher_data?._id, builder, user?.token)
         setLoading(false);
          // error
         if (reqData.status === 'error') {
@@ -51,8 +53,8 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
         }
         if (reqData.status === 'ok') {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'update successful' })
-            setValues(reqData.data)
-            onUpdate(reqData.data)
+            setValues({ ...data, dispatcher_data: {...data.dispatcher_data, ...reqData.data } })
+            onUpdate({ ...data, dispatcher_data: {...data.dispatcher_data, ...reqData.data } })
         }
     }
 
@@ -81,7 +83,7 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
                         <label className="small" htmlFor="vehicle_type">Type of vehicle* <span className="small font-weight-bold">Options are motorbike, car, bus or truck</span></label>
 
                         <br />
-                        <Dropdown value={values.vehicle_type}  id="vehicle_type" name="vehicle_type" options={vehicles}onChange={e => setValues(d => ({ ...d, vehicle_type: e.target.value }))} placeholder="Select a Vehicle"/>
+                        <Dropdown value={values?.vehicle_type}  id="vehicle_type" name="vehicle_type" options={vehicles}onChange={e => setValues(d => ({ ...d, vehicle_type: e.target.value }))} placeholder="Select a Vehicle"/>
                     </div>
                 </div>
             </div>
@@ -234,18 +236,18 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
 
     useEffect(() => {
         setValues(getFormData(data));
-        
     }, [data])
 
     const onSubmit = async () => {
         // update
         let builder = formValidator.validateDataUpdate(values, getFormData(data), {}, setError)
         if (!builder) {
-            return
+            return 
         }
          // update
         setLoading(true)
-        let reqData = await lib.update(values._id, builder, user?.token)
+        builder.user_id = values.auth_id;
+        let reqData = await lib.update(builder, user?.token)
         setLoading(false);
         // error
         if (reqData.status === 'error') {
@@ -253,8 +255,8 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
         }
         if (reqData.status === 'ok') {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'update successful' })
-            setValues(reqData.data)
-            onUpdate(reqData.data)
+            setValues({ ...data, ...reqData.data })
+            onUpdate({ ...data, ...reqData.data })
             // onHide()
         } 
     }
@@ -296,14 +298,7 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
                     </div>
                 </div>
             </div>
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="p-field mb-1">
-                        <label htmlFor="username">Username </label><br />
-                        <InputText style={{ width: '100%' }} id="username" name="username" onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values?.username} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username" />
-                    </div>
-                </div>
-            </div>
+             
             
             <div className="user-form__button-wp">
                 <Button onClick={() => onSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Update" />

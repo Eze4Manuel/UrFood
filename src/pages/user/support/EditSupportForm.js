@@ -76,7 +76,6 @@ export const EditPassword = ({ data, show, onHide }) => {
         if (reqData.status === 'error') {
             helpers.sessionHasExpired(set, reqData?.msg, setError);
             setLoading(false);
-
         }
         if (reqData.status === 'ok') {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'password updated' })

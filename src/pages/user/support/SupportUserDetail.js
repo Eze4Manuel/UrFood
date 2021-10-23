@@ -19,7 +19,6 @@ const SupportUserDetail = ({ data }) => {
             </div>
             <div className="my-3">
                 <h6 className="mb-3">Account Information</h6>
-                <p className="user-info__detail"><span>Username</span> <span>{data?.username}</span></p>
                 <p className="user-info__detail"><span>Account</span> <span>{data?.user_type}</span></p>
             </div>
         </Fragment>

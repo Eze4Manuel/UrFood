@@ -5,9 +5,9 @@ import NoData from '../../../components/widgets/NoData';
 import lib from './lib';
 import Table from '../../../components/table';
 import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/utility';
-import NewPartnerForm from './NewVendorForm';
+import NewVendorForm from './NewVendorForm';
 import { ContainerLoader } from '../../../components/loading/Loading';
-import PartnerUserData from './VendorUserData'
+import VendorUserData from './VendorUserData'
 import { useAuth } from '../../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
 import Alert from '../../../components/flash/Alert';
@@ -18,22 +18,34 @@ const noDataParagraph = "You can create a vendor yourself by clicking on the but
 
 const fQeury = (data) => {
     return data?.map(d => {
-        let pd = d?.partner_data
+        let pd = d?.vendor_data
         return {
-            organization: pd?.organization,
             phone_number: pd?.phone_number,
-            branch: pd?.branch,
-            state: pd?.state,
-            city: pd?.city,
+            vendor_name: pd?.name,
             area: pd?.area,
+            city: pd?.city,
             address: pd?.address,
-            partner_id: pd?._id,
-            ...d
+            ...d,
+            vendor_id: pd?._id,
         }
     })
 }
 
-const Partner = (props) => {
+
+const processor = (d) => {
+    let pd = d?.vendor_data
+    return {
+        phone_number: pd?.phone_number,
+        vendor_name: pd?.name,
+        area: pd?.area,
+        city: pd?.city,
+        address: pd?.address,
+        ...d,
+        vendor_id: pd?._id
+    }
+}
+
+const Vendor = (props) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
@@ -51,7 +63,7 @@ const Partner = (props) => {
     useEffect(() => {
         (async () => {
             setLoader(true)
-            let reqData = await lib.get(page, null, user?.token, 'partner')
+            let reqData = await lib.get(page, null, user?.token, 'vendor')
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
@@ -59,9 +71,8 @@ const Partner = (props) => {
                 setData(fQeury(reqData.data))
             }
             setLoader(false);
-            console.log(reqData.data);
-
         })();
+
     }, [user?.token, page, set])
 
       
@@ -87,7 +98,7 @@ const Partner = (props) => {
 
     const onSearch = async () => {
         setLoader(true);
-        let reqData = await lib.get(1, searchInput, user?.token, 'partner')
+        let reqData = await lib.get(1, searchInput, user?.token, 'vendor')
         setLoader(false)
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
             setData(fQeury(reqData.data))
@@ -109,7 +120,9 @@ const Partner = (props) => {
         if (reqData.status === "ok") {
             setValues(resetData)
             setOpenForm(false)
-            helpers.alert({notifications: notify, icon: 'success', color: 'green', message: 'Partner account created'})
+            console.log(reqData.data);
+            setData([processor(reqData.data), ...data])
+            helpers.alert({notifications: notify, icon: 'success', color: 'green', message: 'Vendor account created'})
             await reload()
         }
     }
@@ -144,12 +157,12 @@ const Partner = (props) => {
             <main>
                 {loader ? <ContainerLoader /> : null}
                 <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
-                <NewPartnerForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
+                <NewVendorForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
                 <SubNavbar  
                     showFilter
                     showSearch
                     showButton
-                    filterName="filter_partner"
+                    filterName="filter_vendor"
                     filterList={['name', 'location','phone']}
                     searchPlaceholder="Search for vendor..."
                     ariaLabel="vendor"
@@ -157,19 +170,19 @@ const Partner = (props) => {
                     onSearch={() => onSearch()}
                     searchInput={searchInput} 
                     onChangeInput={setSearchInput}
-                    searchID="search_partner"
+                    searchID="search_vendor"
                     buttonTitle="Add Vendor"
                     onSelectChange={setOption}
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
                 {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
-                <PartnerUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                <VendorUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                 {
                     viewData.length > 0
                     ? (
                         
-                        <div className="partner-table__container">
+                        <div className="vendor-table__container">
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}
@@ -180,9 +193,9 @@ const Partner = (props) => {
                                 data={viewData}
                                 perPage={perPage}
                                 route="" // {config.pages.user}
-                                tableTitle="Partner" 
-                                tableHeader={['#','ID', 'Partner', 'Username', 'Phone']}
-                                dataFields={[ 'partner_id', 'organization', 'username', 'phone_number']}
+                                tableTitle="Vendor" 
+                                tableHeader={['#','ID', 'Vendor Name',  'Phone']}
+                                dataFields={['vendor_id', 'vendor_name', 'phone_number']}
                             />
                         </div>
                     )
@@ -193,4 +206,4 @@ const Partner = (props) => {
     )
 }
 
-export default Partner
+export default Vendor

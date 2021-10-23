@@ -31,7 +31,7 @@ lib.getOne = async (id, token) => {
 lib.create = async (values, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        return await (await request.post('/auth/register', values, cfg)).data 
+        return await (await request.post('/auth/admin', values, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
@@ -41,7 +41,7 @@ lib.updatePassword = async (data, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7));
         
-        return await (await request.put('auth/admin-update-password', data, cfg)).data
+        return await (await request.post('auth/admin-password-reset', data, cfg)).data
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }

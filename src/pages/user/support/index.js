@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Support.css';
 import NoData from '../../../components/widgets/NoData';
 import SubNavbar from '../../../components/subnavbar/index';
@@ -31,20 +31,20 @@ const Support = (props) => {
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
 
-    // // data 
-    // useEffect(() => {
-    //     (async () => {
-    //         setLoader(true)
-    //         let reqData = await lib.get(page, null, user?.token)
-    //         if (reqData.status === "error") {
-    //             helpers.sessionHasExpired(set, reqData.msg)
-    //         }
-    //         if (reqData.status === 'ok') {
-    //             setData(reqData.data)
-    //         }
-    //         setLoader(false);
-    //     })()
-    // }, [user?.token, page, set])
+    // data 
+    useEffect(() => {
+        (async () => {
+            setLoader(true)
+            let reqData = await lib.get(page, null, user?.token)
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
+            if (reqData.status === 'ok') {
+                setData(reqData.data)
+            }
+            setLoader(false);
+        })()
+    }, [user?.token, page, set])
 
     // setup table data
     const perPage = getPageCount(10);
@@ -78,13 +78,12 @@ const Support = (props) => {
     }
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
-
         let builder = formValidator.validateNewSupport(values, {}, setError)
         if (!builder) {
             return
         }
         setLoading(true);
-        let reqData = await lib.create(values, user?.token);
+        let reqData = await lib.create(builder, user?.token);
         setLoading(false)
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg, setError)
@@ -153,7 +152,6 @@ const Support = (props) => {
                 { viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                     <div className="support-table__container">
                         <div className="conatainer overflow-hidden">
-                            {console.log(viewData)}
                             <SupportUserData onDeleted={(id) => onDeleted(id)} update={onUpdated} data={selected} show={openData} onHide={() => setOpenData(false)} />
                             {
                                 viewData.length > 0 
@@ -169,8 +167,8 @@ const Support = (props) => {
                                         perPage={perPage}
                                         route="" // {config.pages.user}
                                         tableTitle="Support" 
-                                        tableHeader={['#','ID', 'Username']}
-                                        dataFields={['auth_id', "username"]}
+                                        tableHeader={['#','ID', 'First Name', 'Last Name', "Phone"]}
+                                        dataFields={['auth_id', "first_name", 'last_name', 'phone_number']}
                                     />                                    
                                 )
                                 : null

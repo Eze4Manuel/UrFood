@@ -34,6 +34,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
         if (!builder) {
             return
         }
+        
         // submit
         props.onSubmit(builder, setLoading, setError, setValues, config.userData)
     }
@@ -49,7 +50,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="first_name">First Name*</label><br />
-                            <InputText style={{ width: '100%' }} id="first_name" name="first_name" onChange={e => setValues(d => ({ ...d, first_name: e.target.value }))} autoFocus value={values.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="fist name" />
+                            <InputText style={{ width: '100%' }} id="first_name" name="first_name" onChange={e => setValues(d => ({ ...d, first_name: e.target.value }))} autoFocus value={values.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="first name" />
                         </div>
                     </div>
                     <div className="col-lg-6">

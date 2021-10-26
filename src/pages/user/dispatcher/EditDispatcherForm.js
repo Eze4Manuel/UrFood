@@ -244,6 +244,7 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
         if (!builder) {
             return 
         }
+        
          // update
         setLoading(true)
         builder.user_id = values.auth_id;
@@ -295,6 +296,13 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
                     <div className="p-field mb-1">
                         <label htmlFor="phone_number">Phone number</label><br />
                         <InputText style={{ width: '100%' }} id="phone_number" name="phone_number" onChange={e => setValues(d => ({ ...d, phone_number: e.target.value }))} value={values?.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="080*********" />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="p-field mb-1">
+                        <label htmlFor="username">Username</label><br />
+                        <InputText style={{ width: '100%' }} id="username" name="username" onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values?.username} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username" />
                     </div>
                 </div>
             </div>

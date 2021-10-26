@@ -14,7 +14,8 @@ const config = {
                 {name: 'support', icon: 'las la-user-lock', link: conf.pages.support},
                 {name: 'vendors', icon: 'las la-user-friends', link: conf.pages.vendor},
                 {name: 'dispatchers', icon: 'las la-truck-moving', link: conf.pages.dispatch},
-            ]
+                {name: 'customers', icon: 'las la-people-carry', link: conf.pages.customers},
+            ]   
         },
         {
             divider: 'services',

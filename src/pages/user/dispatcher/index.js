@@ -73,7 +73,7 @@ const Dispatcher = (props) => {
         }
     }
 
-    const onSearch = async () => {
+    const onSearch = async () => { 
         setLoader(true)
         let reqData = await lib.get(1, searchInput, user?.token)
         setLoader(false)
@@ -168,8 +168,8 @@ const Dispatcher = (props) => {
                                     perPage={perPage}
                                     route="" // {config.pages.user}
                                     tableTitle="Dispatcher"
-                                    tableHeader={['#', 'ID', 'First Name', 'Last Name', 'Phone']}
-                                    dataFields={['_id', 'first_name', 'last_name', 'phone_number']}
+                                    tableHeader={['#', 'ID', 'First Name', 'Last Name', 'Username', 'Phone']}
+                                    dataFields={['_id', 'first_name', 'last_name', 'username','phone_number']}
                                 />
                             )
                             : null

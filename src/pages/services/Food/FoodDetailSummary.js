@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { toNumber } from '../../../core/func/format';
-import './OrderSummary.css';
+import './FoodSummary.css';
 import DashbaordTable from '../../../components/dashboardhelps/DashbaordTable';
 import { ContainerLoader } from '../../../components/loading/Loading';
 import lib from './lib';

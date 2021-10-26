@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import './OrderDetail.css';
+import './FoodDetail.css';
 import { Dialog } from 'primereact/dialog';
 import config from '../../../assets/utils/config';
-import OrderDetailSummary, { Details } from './OrderDetailSummary'
+import FoodDetailSummary, { Details } from './FoodDetailSummary'
 import Flash from '../../../components/flash/Flash';
 import lib from './lib';
 import { useAuth } from '../../../core/hooks/useAuth';
@@ -49,7 +49,7 @@ const OrderData = ({ data, show, onHide, onDeleted}) => {
                 <div className="row">
                     <div className="col-8">
                         <Flash title="Warning!" show={delWarning} message={deleteWarning} onCancel={() => setDelWarning(false)} onProceed={() => deleteAccount()} />
-                        <OrderDetailSummary data={values}/>
+                        <FoodDetailSummary data={values}/>
                     </div>
                     <div className="col-4">
                         <Details data={values}  />

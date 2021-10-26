@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Order.css';
+import './Food.css';
 import NoData from '../../../components/widgets/NoData';
 import SubNavbar from '../../../components/subnavbar/index';
 import { useAuth } from '../../../core/hooks/useAuth';
@@ -9,7 +9,7 @@ import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/util
 import { ContainerLoader } from '../../../components/loading/Loading';
 import Tabs from "../../../components/tabs/Tabs";
 import helpers from '../../../core/func/Helpers';
-import OrderDetail from './OrderDetail'
+import OrderDetail from './FoodDetail'
 
 const noDataTitle = "You haven't created any item yet.";
 const noDataParagraph = "All Items made will appear here.";

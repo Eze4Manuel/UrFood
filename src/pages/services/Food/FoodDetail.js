@@ -11,12 +11,11 @@ import helpers from '../../../core/func/Helpers';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const OrderData = ({ data, show, onHide, onDeleted}) => {
+const FoodData = ({ data, show, onHide, onDeleted}) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [, setLoading] = React.useState(false);
-    // const [showOrder, ] = React.useState(true);
     const [delWarning, setDelWarning] = React.useState(false);
     const [, setError] = React.useState(false);
 
@@ -24,7 +23,6 @@ const OrderData = ({ data, show, onHide, onDeleted}) => {
         setValues(data);
         setDelWarning(false)
     }, [data])
-
     
     const deleteAccount = async () => {
         setError('')
@@ -44,7 +42,7 @@ const OrderData = ({ data, show, onHide, onDeleted}) => {
     }
 
     return (
-        <Dialog closeOnEscape header="Order Details" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
+        <Dialog closeOnEscape header="Food Details" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
             <div className="order-info__ctn">
                 <div className="row">
                     <div className="col-8">
@@ -60,4 +58,4 @@ const OrderData = ({ data, show, onHide, onDeleted}) => {
     )
 }
 
-export default OrderData
+export default FoodData

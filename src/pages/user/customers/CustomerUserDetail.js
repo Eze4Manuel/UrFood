@@ -15,7 +15,6 @@ const CustomerUserDetail = ({ data }) => {
                 <p className="user-info__detail"><span>City</span> <span>{data?.city}</span></p>
                 <p className="user-info__detail"><span>Address</span> <span>{data?.address}</span></p>
             </div>
-            
         </Fragment>
     )
 }

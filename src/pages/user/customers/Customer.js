@@ -70,7 +70,6 @@ const Customer = (props) => {
             }
             setLoader(false);
         })();
-
     }, [user?.token, page, set])
 
       

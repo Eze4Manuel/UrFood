@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Order.css';
+import './Food.css';
 import NoData from '../../../components/widgets/NoData';
 import SubNavbar from '../../../components/subnavbar/index';
 import { useAuth } from '../../../core/hooks/useAuth';
@@ -9,25 +9,29 @@ import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/util
 import { ContainerLoader } from '../../../components/loading/Loading';
 import Tabs from "../../../components/tabs/Tabs";
 import helpers from '../../../core/func/Helpers';
-import OrderDetail from './OrderDetail'
+import FoodUserData from './FoodUserData';
+import { useNotifications } from '@mantine/notifications';
+import NewFoodForm from './NewFoodForm';
 
 const noDataTitle = "You haven't created any item yet.";
 const noDataParagraph = "All Items made will appear here.";
 
-const Order = (props) => {
+const Food = (props) => {
     const { set, user } = useAuth();
+    const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
-    const [, setOpenForm] = useState(false);
+    const [openForm, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
     const [order, setOrder] = useState("All");
     const [data, setData] = useState([]);
     const [, setNotFound] = useState(false);
-    const [processedData, setProcessedData] = useState([]);
+    const [, setProcessedData] = useState([]);
     const [selected, setSelected] = useState(null);
     const [option, setOption] = useState('name');
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
+
 
     const fQeury = (data) => {
         return data.map(d => {
@@ -39,6 +43,7 @@ const Order = (props) => {
             }
         })
     }
+
     // data 
     useEffect(() => {
         (async () => {
@@ -60,21 +65,20 @@ const Order = (props) => {
     const paginate = getPages(data?.length, perPage);
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
-    let viewData = processedData?.slice(start, stop);
+    let viewData = data?.slice(start, stop);
 
-    // Trimming data length
-    viewData = viewData.map(e => {
-        if(e.pickup_address.length > 20) {
-            e.pickup_address = e.pickup_address.substring(0, 20) + '...';
+    const reload = async () => {
+        setLoader(true)
+        let reqData = await lib.get(1, null, user?.token)
+        setLoader(false)
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg)
         }
-        if(e.delivery_address.length > 20) {
-            e.delivery_address = e.delivery_address.substring(0, 20) + '...';
+        if (reqData.status === 'ok' && reqData?.data?.length > 0) {
+            setData(fQeury(reqData.data))
         }
-        if(e.order_date){
-            e.order_date = new Date(e.order_date).toDateString()
-        }
-        return e;
-    });
+    }
+
 
 
     const onSearch = async () => {
@@ -104,7 +108,23 @@ const Order = (props) => {
             setLoader(false)
         }, 3000)
     }
- 
+
+    const onCreate = async (values, setLoading, setError, setValues, resetData) => {
+
+        setLoading(true);
+        let reqData = await lib.create(values, user?.token)
+        setLoading(false);
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg, setError)
+        }
+        if (reqData.status === "ok") {
+            setValues(resetData);
+            setOpenForm(false);
+            setData([reqData.data, ...data])
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Food account created' })
+            await reload();
+        }
+    }
 
     const changeTab = (val) => {
         switch (val) {
@@ -140,7 +160,6 @@ const Order = (props) => {
                 break;
         }
     }
-    
 
     const onDeleted = (id) => {
         // remove from selected
@@ -156,15 +175,17 @@ const Order = (props) => {
         <div className='main-content'>
             <main>
                 {loader ? <ContainerLoader /> : null}
+                <NewFoodForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
                 <SubNavbar
                     showFilter
                     showSearch
-                    showButton={false}
+                    showButton={true}
                     filterName="item"
                     filterList={['name', 'location', 'phone']}
                     searchPlaceholder="Search for item..."
                     ariaLabel="item"
                     ariaDescription="item"
+                    buttonTitle="Add Food"
                     onSearch={() => onSearch()}
                     searchInput={searchInput}
                     onChangeInput={setSearchInput}
@@ -174,10 +195,10 @@ const Order = (props) => {
                     onAddItem={() => setOpenForm(true)}
                 />
                 <div className="order-table__container">
-                    <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["All", "pending", "active", "cancelled", "fulfilled"]} />
                     {data?.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                         <>
-                            <OrderDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)}/>
+                            <FoodUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => {setOpenData(false); reload();}} />
+
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}
@@ -187,10 +208,10 @@ const Order = (props) => {
                                 pages={paginate}
                                 data={viewData}
                                 perPage={perPage}
-                                route="" // {config.pages.user}
+                                route=""
                                 tableTitle="Items"
-                                tableHeader={['#', 'Items', 'Pickup', 'Destination', 'Fee', 'Date', 'Status']}
-                                dataFields={['quantity', 'pickup_area', 'delivery_area', 'total', 'order_date', 'status']}
+                                tableHeader={['#', 'ID', 'Name', 'Category']}
+                                dataFields={['_id', 'name', 'category']}
                             />
                         </>
                     }
@@ -200,4 +221,4 @@ const Order = (props) => {
     );
 }
 
-export default Order;
+export default Food;

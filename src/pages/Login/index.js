@@ -74,7 +74,7 @@ const Login = (props) => {
                                     <div className="col-lg-12">
                                         <div className="p-field mb-2">
                                             <label htmlFor="password">Password</label><br />
-                                            <Password style={{ width: '100%' }} id="password" name="password" type="text" toggleMask value={values.password} onChange={e => setValues(d => ({...d, password: e.target.value}))} placeholder="**********" />
+                                            <Password style={{ width: '100%', height: '35px'}} id="password" name="password" type="text" toggleMask value={values.password} onChange={e => setValues(d => ({...d, password: e.target.value}))} placeholder="**********" />
                                         </div>
                                     </div>
                                     <div className="col-lg-12">

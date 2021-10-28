@@ -14,6 +14,7 @@ const config = {
         dashboard: '/dashboard',
         dispatch: '/dispatch',
         vendor: '/vendor',
+        customers: '/customers',
         order: '/order',
         food: '/food',
         settings: '/settings',

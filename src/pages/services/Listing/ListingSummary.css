@@ -1,0 +1,11 @@
+.product-summary__ctn {
+    background: #fbfbfb;
+}
+
+.shape-xs {
+    width: 10px;
+    height: 10px;
+}
+.pc-line {
+    line-height: 1.3;
+}

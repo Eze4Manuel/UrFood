@@ -7,7 +7,6 @@ import lib from './lib';
 import Table from '../../../components/table';
 import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/utility';
 import { ContainerLoader } from '../../../components/loading/Loading';
-import Tabs from "../../../components/tabs/Tabs";
 import helpers from '../../../core/func/Helpers';
 import FoodUserData from './FoodUserData';
 import { useNotifications } from '@mantine/notifications';
@@ -22,7 +21,6 @@ const Food = (props) => {
     const [searchInput, setSearchInput] = useState('');
     const [openForm, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
-    const [order, setOrder] = useState("All");
     const [data, setData] = useState([]);
     const [, setNotFound] = useState(false);
     const [, setProcessedData] = useState([]);
@@ -35,10 +33,7 @@ const Food = (props) => {
 
     const fQeury = (data) => {
         return data.map(d => {
-            let px = d || []
             return {
-                email: px?.email || d?.contact_email,
-                phone_number: px?.phone_number || d?.contact_phone_nnumber,
                 ...d
             }
         })
@@ -124,42 +119,7 @@ const Food = (props) => {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Food account created' })
             await reload();
         }
-    }
-
-    const changeTab = (val) => {
-        switch (val) {
-            case 'All':
-                setProcessedData(data)
-                setOrder(val);
-                break;
-            case 'pending':
-                setProcessedData(data.filter(e => {
-                    return e.status === val
-                }));
-                setOrder(val)
-                break;
-            case 'active':
-                setProcessedData(data.filter(e => {
-                    return e.status === val
-                }));
-                setOrder(val)
-                break;
-            case 'cancelled':
-                setProcessedData(data.filter(e => {
-                    return e.status === val
-                }));
-                setOrder(val)
-                break;
-            case 'fulfilled':
-                setProcessedData(data.filter(e => {
-                    return e.status === val
-                }));
-                setOrder(val)
-                break;
-            default:
-                break;
-        }
-    }
+    } 
 
     const onDeleted = (id) => {
         // remove from selected

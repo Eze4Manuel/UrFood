@@ -4,15 +4,14 @@ import helpers from '../../../core/func/Helpers';
 const lib = {}
 
 
-
 lib.get = async (page, search, token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         if (search) {
-            uri = `/orders?page=${page}&q=${search}`;
+            uri = `/orders/admin/?page=${page}&q=${search}`;
         } else {
-            uri = `/orders?page=${page}`;
+            uri = `/orders/admin/?page=${page}`;
         }
         return await (await request.get(uri, cfg)).data
     } catch (e) {
@@ -20,23 +19,24 @@ lib.get = async (page, search, token) => {
     }
 }
 
-
 lib.getDispatchers = async (token, user_type) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `auth/admin?user_type=dispatcher`;
+        uri = `auth/admin?user_type=${user_type}`;
         return await (await request.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
 }
 
+
+
 lib.updateDispatcher = async (token, order_id, dispatcher_id) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `orders/assign-dispatcher`;
+        uri = `orders/admin/assign-dispatcher`;
 
         return await (await request.put(uri, { order_id, dispatcher_id }, cfg)).data
     } catch (e) {
@@ -45,18 +45,28 @@ lib.updateDispatcher = async (token, order_id, dispatcher_id) => {
 }
 
 
-
 lib.updateStauts = async (token, auth_id, state) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `/orders/update-order-status/${auth_id}`;
-        return await (await request.put(uri, { status: state }, cfg)).data
+        uri = `/orders/admin/update-order-status/${auth_id}`;
+        return await (await request.put(uri, { order_status: state }, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
 }
 
+
+lib.registerApp = async (token, phone_number) => {
+    let uri = `/notifications/web-subscription`;     
+    try {
+
+        let cfg = helpers.getHeaderAccessControl()
+        return await (await request.post(uri, {token, phone_number}, cfg )).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
 
 
 

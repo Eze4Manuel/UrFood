@@ -18,6 +18,8 @@ lib.get = async (page, search, token) => {
     }
 }
 
+
+
 lib.getOne = async (id, token) => {
     let uri = `/auth/admin/${id}`;
     try {

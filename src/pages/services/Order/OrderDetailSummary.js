@@ -11,44 +11,53 @@ import helpers from '../../../core/func/Helpers';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { ListBox } from 'primereact/listbox';
-
+  
 const Detail = ({ name, value }) => value ? (<p className="order-info__detail"><span>{name}</span> <span>{value}</span></p>) : null
 
-export const Details = ({ data, updateAllData }) => {
+export const Details = ({ data, updateAllData, updateDispatchStatus }) => {
     const { set, user } = useAuth();
     const [, setAllow] = useState(true);
     const [, setData] = useState([]);
     const [loader, setLoader] = useState(false);
     const notify = useNotifications();
-    const [selectedDispatch,] = useState(null);
-    const [, setAssigning] = useState(true);
     const [displayPosition, setDisplayPosition] = useState(false);
     const [, setPosition] = useState('left');
+    const [selectedDispatch,] = useState(null);
     const [dispatchers, setDispatchers] = useState([]);
+    const [assign, setAssigning] = useState(true);
+
+
 
     const updateStatus = async (val) => {
         setLoader(true);
         let reqData = await lib.updateStauts(user?.token, data?._id, val)
         setLoader(false)
         if (reqData.status === 'ok') {
-            data.status = val;
+            data.order_status = val;
             setData(data);
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Order Updated' })
+
         } else {
             helpers.alert({ notifications: notify, icon: 'danger', color: 'red', message: reqData.msg })
         }
     }
 
     const assignDispatch = async () => {
-        setLoader(true)
+        setLoader(true);
+        // Fetches all available dispatchers
         let reqData = await lib.getDispatchers(user?.token, 'dispatcher');
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg)
         }
         if (reqData.status === 'ok') {
-            setDispatchers(reqData.data);
-            setDisplayPosition(true)
-            setPosition('left');
+            if (reqData.data?.length > 0) {
+                setDispatchers(reqData.data);
+                setPosition('right');
+                setDisplayPosition(true)
+                console.log(reqData.data);
+            } else {
+                helpers.alert({ notifications: notify, icon: 'warning', color: 'yellow', message: 'No available Dispatcher' })
+            }
         }
         setLoader(false);
     }
@@ -75,7 +84,6 @@ export const Details = ({ data, updateAllData }) => {
                 updateStatus('fulfilled')
             }
         },
-
     ];
 
     const onHide = (name) => {
@@ -93,8 +101,8 @@ export const Details = ({ data, updateAllData }) => {
         }
         if (reqData.status === 'ok') {
             // Updating current selected data
-            data.dispatcher = val.dispatcher_data;
-            data.status = reqData.data.status;
+            data.dispatcher = val;
+            data.order_status = reqData.data.order_status;
             setData(data);
             onHide();
             setAllow(true);
@@ -105,24 +113,20 @@ export const Details = ({ data, updateAllData }) => {
         setAssigning(true);
     }
 
-
-
     return (
         <>
-            <Dialog header="Header" visible={displayPosition} style={{ width: '30rem' }} onHide={() => onHide()}>
-                <ListBox value={selectedDispatch} options={dispatchers} onChange={(e) => dispatchSelected(e.value)} optionLabel="username" style={{ width: '26.5vw', 'border': 'none', 'padding': '0px', 'background': '#fafafa' }} />
+            <Dialog header={ assign ? "Assign Dispatch" : "Assigning ..."} visible={displayPosition} style={{'border': 'none' }} onHide={() => onHide()}>
+                <ListBox value={selectedDispatch} options={dispatchers} onChange={(e) => dispatchSelected(e.value)} optionLabel="email" style={{ width: '20vw', 'border': 'none', 'padding': '0px', 'background': 'lightgrey' }} />
             </Dialog>
-
-
             <Fragment>
                 <div className="mb-3">
-                    <h6 className="mb-3"> Partner Detail</h6>
-                    <Detail name="Name" value={data?.partner?.name} />
-                    <Detail name="Phone" value={data?.partner?.phone_number} />
-                    <Detail name="Email" value={data?.partner?.email} />
+                    <h6 className="mb-3"> Vendor Detail</h6>
+                    <Detail name="Name" value={data?.vendor?.name} />
+                    <Detail name="Phone" value={data?.vendor?.phone_number} />
+                    <Detail name="Email" value={data?.vendor?.email} />
+                    <Detail name="Attendant" value={data?.vendor?.attendant} />
                 </div>
             </Fragment>
-
             <Fragment>
                 <div className="mb-3">
                     {(data?.dispatcher?.name === '') ?
@@ -141,10 +145,9 @@ export const Details = ({ data, updateAllData }) => {
                         </>
                     }
                 </div>
-
             </Fragment>
             <Fragment>
-                <div className="mb-3">
+                <div className="mb-5">
                     <h6 className="mb-3">Customer Detail</h6>
                     <Detail name="Name" value={data?.customer?.name} />
                     <Detail name="Phone" value={data?.customer?.phone_number} />
@@ -154,11 +157,11 @@ export const Details = ({ data, updateAllData }) => {
             <Fragment>
                 <div className="mt-3" style={{ 'display': 'flex' }}>
                     <span className="mb-2 mr-2">
-                        <Button style={{ 'background': '#011b33' }} onClick={() => assignDispatch()} disabled={( data?.status === 'fulfilled' || data?.status === 'cancelled') } label="Assign Dispatcher" className="p-button-sm" />
+                        <Button style={{ 'background': '#011b33' }} onClick={() => assignDispatch()} disabled={( data?.order_status === 'fulfilled' || data?.order_status === 'cancelled') } label="Assign Dispatcher" className="p-button-sm" />
                     </span>
-                    {(data?.dispatcher?.name !== '' ) ?
+                    {(data?.dispatcher?.name !== '') ?
                         <span className='ml-2'>
-                            <SplitButton style={{ "font-size": "10px", 'background': '#011b33' }} label="update status" model={items} disabled={( data?.status === 'fulfilled' || data?.status === 'cancelled') } className="p-button-sm p-mr-1"></SplitButton>
+                            <SplitButton style={{ "font-size": "10px", 'background': '#011b33' }} label="update status" model={items} disabled={( data?.order_status === 'fulfilled' || data?.order_status === 'cancelled') } className="p-button-sm p-mr-1"></SplitButton>
                         </span>
                         :
                         null
@@ -173,10 +176,8 @@ export const Details = ({ data, updateAllData }) => {
 }
 
 const OrderDetailSummary = ({ data }) => {
-    let amount = data?.products?.map(item => item.amount)?.reduce((total, value) => total + value);
-    let quantity = data?.products?.map(item => item.quantity)?.reduce((total, value) => total + value);
-    const months = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
+    let amount = data?.items?.map(item => item.amount)?.reduce((total, value) => total + value);
+    let quantity = data?.items?.map(item => item.quantity)?.reduce((total, value) => total + value);
     return (
         <>
             <Fragment>
@@ -185,16 +186,16 @@ const OrderDetailSummary = ({ data }) => {
                         <span className="mb-3 ml-3">#Order</span>
                         <span className="mb-3 ml-3">{data?.order_date}</span>
                     </h6>
-                    <DashbaordTable col={12} dataRow={['name', 'quantity', 'unit_value', 'amount']} data={data?.products || []} header="Products" headerRow={['Item', 'Quanity', 'Unit', 'Amount']} />
+                    <DashbaordTable col={12} dataRow={['food_listing_id', 'name', 'quantity',  'amount']} data={data?.items || []} header="Items" headerRow={['listing ID', 'Item', 'Quanity', 'Amount']} />
                     <div className="row ml-1 mt-3">
                         <div className="col-6">
-                            <h5>Total quantity</h5>
+                            <h5>Total Quantity</h5>
                         </div>
                         <div className="col-6">
                             <h5 className="order-detail__left mr-3">{quantity}</h5>
                         </div>
                         <div className="col-6">
-                            <h5>Total amount</h5>
+                            <h5>Total Amount</h5>
                         </div>
                         <div className="col-6">
                             <h5 className="order-detail__left mr-3">₦{toNumber(amount)}</h5>
@@ -207,20 +208,13 @@ const OrderDetailSummary = ({ data }) => {
                     <h6 className="mb-3">Order Detail</h6>
                     <Detail name="Name" value={data?.name} />
                     <Detail name="Order quantity" value={data?.order_quantity} />
-                    <Detail name="Pickup area" value={data?.pickup_area} />
-                    <Detail name="Pickup address" value={data?.pickup_address} />
+                    <Detail name="Dispatch fee" value={data?.dispatch_fee} />
                     <Detail name="Delivery area" value={data?.delivery_area} />
                     <Detail name="Delivery address" value={data?.delivery_address} />
-                    <Detail name="Delivery option" value={data?.delivery_option} />
-                    <Detail name="Delivery time" value={data?.delivery_time} />
-                    <Detail name="Dispatch fee" value={data?.dispatch_fee} />
-                    <Detail name="Communication" value={data?.communication_option} />
-                    <Detail name="Order status" value={data?.status} />
-                    <Detail name="Payment Method" value={data?.payment_method} />
-                    <Detail name="Vehicle" value={data?.vehicle} />
-                    <Detail name="Weight" value={data?.weight} />
-                    <Detail name="Time" value={data?.time} />
-                    <Detail name="Month" value={months[data?.month]} />
+                    <Detail name="Order amount" value={data?.order_amount} />
+                    <Detail name="Order status" value={data?.order_status} />
+                    <Detail name="Pharmacy area" value={data?.pharmacy_area} />
+                    <Detail name="Month" value={data?.month} />
                     <Detail name="Year" value={data?.year} />
                     <Detail name="Total Fee" value={data?.total} />
 

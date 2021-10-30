@@ -18,9 +18,7 @@ const Navbar = (props) => {
     }
 
     const onHideSidebar = () => {
-        // TODO: hide siode bar
-        // const sb = document.querySelector('.sidebar_wp');
-        // sb?.classList?.toggle('hide_sidebar');
+        
     }
 
     return (

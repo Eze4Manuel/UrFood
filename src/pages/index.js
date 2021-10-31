@@ -6,7 +6,7 @@ import {
   Redirect
 } from 'react-router-dom';
 import Context from '../core/context/Store';
-import Dashboard from './dashboard';  
+import Dashboard from './dashboard';
 import Sidebar from '../components/navigation/Sidebar';
 import { routes } from './config';
 import Navbar from '../components/navigation/Navbar';
@@ -24,7 +24,6 @@ export const isSuperAdmin = (user) => {
   return user?.user_type === 'superadmin'
     && user?.access_level === 4;
 }
-
 
 const App = (props) => {
   const { msgs, user } = useContext(Context).state;

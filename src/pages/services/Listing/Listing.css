@@ -1,6 +1,6 @@
-.trip-table__container {
-    position: absolute;
+.order-table__container {
     left: 255px;
     width: 80%;
     overflow: hidden;
+    position: absolute;
 }

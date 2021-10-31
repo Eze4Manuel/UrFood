@@ -1,0 +1,19 @@
+.p-password input {
+    width: 250px;
+}
+
+.customer-form__button-wp {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+/* DropdownDemo.css */
+
+.dropdown-demo .p-dropdown {
+    width: 14rem;
+    height: 30px;
+}
+
+.dropdown-demo .country-item-value img.flag {
+    width: 17px;
+}

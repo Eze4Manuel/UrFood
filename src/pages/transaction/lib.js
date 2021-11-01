@@ -23,7 +23,7 @@ lib.getDispatchFee = async (token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `/fees/urmed-dispatch-fee`;
+        uri = `/fees`;
         return await (await request.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
@@ -35,7 +35,7 @@ lib.updateDispatch = async (token, amount) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `/fees/urmed-dispatch-fee`;
+        uri = `/fees`;
         return await (await request.post(uri, { amount: amount } , cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }

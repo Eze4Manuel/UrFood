@@ -56,7 +56,6 @@ const Listing = (props) => {
                 setData(fQeury(reqData.data));
                 setProcessedData(fQeury(reqData.data));
             }
-            console.log(reqData.data);
             setLoader(false);
         })()
     }, [page, set, user?.token])

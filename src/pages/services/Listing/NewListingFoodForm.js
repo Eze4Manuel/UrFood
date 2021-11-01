@@ -18,7 +18,6 @@ const NewListingFoodForm = (props = { onSubmit: null, onHide: null, show: false 
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
-    const [city,] = useState(null);
     const [lazyVendorLoading, setLazyVendorLoading] = useState(false);
     const [lazyFoodLoading, setLazyFoodLoading] = useState(false);
     const [selectedVendor, setSelectedVendor] = useState(null);
@@ -61,8 +60,8 @@ const NewListingFoodForm = (props = { onSubmit: null, onHide: null, show: false 
         setVendorAuth(vendorData?.find(val => {
             if (val.vendor_name === e.value) {
                 setValues({...values, vendor_id: val.vendor_id })
-                return val;
-            }
+                return true;
+            }else return false;
         }))
     }
     const onLazyFoodItemChange = (e) => {
@@ -70,8 +69,8 @@ const NewListingFoodForm = (props = { onSubmit: null, onHide: null, show: false 
         setFoodAuth(dataFood?.find(val => {
             if (val.name === e.value){
                 setValues({...values, food_id: val._id })
-                return val;
-            } 
+                return true;
+            } else return false
         }))
     }
 

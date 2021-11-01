@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Transaction.css';
 import NoData from '../../components/widgets/NoData';
 import SubNavbar from '../../components/subnavbar/index';
@@ -61,33 +61,35 @@ const Transaction = (props) => {
             setLoader(false);
 
     } 
-    // // data 
-    // useEffect(() => {
-    //     (async () => {
-    //         setLoader(true)
-    //         let reqData = await lib.get(page, null, user?.token);
-    //         if (reqData.status === "error") {
-    //             helpers.sessionHasExpired(set, reqData.msg)
-    //         }
-    //         if (reqData.status === 'ok') {
-    //             setData(fQeury(reqData.data))
-    //         }
-    //         setLoader(false);
-    //     })()
-    // }, [page, set, user?.token])
+    // data 
+    useEffect(() => {
+        (async () => {
+            setLoader(true)
+            let reqData = await lib.get(page, null, user?.token);
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
+            if (reqData.status === 'ok') {
+                setData(fQeury(reqData.data))
+            }
+            setLoader(false);
+        })()
+    }, [page, set, user?.token])
 
-    // // Get urmed Dispatch fee
-    // useEffect(() => {
-    //     (async () => {
-    //         let reqData = await lib.getDispatchFee(user?.token);
-    //         if (reqData.status === "error") {
-    //             helpers.sessionHasExpired(set, reqData.msg)
-    //         }
-    //         if (reqData.status === 'ok') {
-    //             setDispatchFee(reqData.data?.amount);
-    //         
-    //     })()
-    // }, [user?.token, set])
+    // Get urfood Dispatch fee
+    useEffect(() => {
+        (async () => {
+            let reqData = await lib.getDispatchFee(user?.token);
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
+            if (reqData.status === 'ok') {
+                setDispatchFee(reqData.data?.amount);
+            }
+            console.log(reqData);
+
+        })()
+    }, [user?.token, set])
 
   
     // setup table data
@@ -96,6 +98,8 @@ const Transaction = (props) => {
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
     const viewData = data?.slice(start, stop);
+
+    
 
     const onSearch = async () => {
         setLoader(true)
@@ -138,6 +142,7 @@ const Transaction = (props) => {
     const updateDispatchFee = (
         <div className="p-grid p-fluid">
             <div className="p-col-12">
+                {console.log(dispatchFee)}
                 <div className="p-inputgroup">
                     <InputText placeholder={`${dispatchFee}`} id='dispatchFee' onChange={(e) => setDispatchFee(e.target.value)} value={dispatchFee} disabled={editable} />
                     <Button icon="pi pi-pencil" onClick={() => setEditable(!editable)} className="p-button-primary p-button-edit" />

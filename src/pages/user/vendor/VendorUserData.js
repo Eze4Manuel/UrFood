@@ -79,7 +79,7 @@ const VendorUserData = ({ data, show, onHide, onDeleted, onUpdated }) => {
             <div className="partner-info__ctn">
                 <div className="partner-info__btn-action-wp">
                     <div className="partner-info__btn-action">
-                        <button onClick={() => onEditPartner()} className="btn btn__edit-ctn btn-action__green">Update Partner Profile</button>
+                        <button onClick={() => onEditPartner()} className="btn btn__edit-ctn btn-action__green">Update Vendor Profile</button>
                         <button onClick={() => onEditPassword()} className="btn btn__edit-ctn btn-action__green">Change password</button>
                         <button onClick={() => setDelWarning(true)} className="btn btn__edit-ctn btn-action__red">Delete</button>
                     </div>

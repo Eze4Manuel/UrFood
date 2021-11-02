@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Divider } from 'primereact/divider';
@@ -12,6 +12,7 @@ import { useAuth } from '../../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
+import { ToggleButton } from 'primereact/togglebutton';
 
 export const EditPassword = ({ data, show, onHide }) => {
     const { set, user } = useAuth();
@@ -132,7 +133,68 @@ export const EditPassword = ({ data, show, onHide }) => {
     ) : null
 }
 
-const EditSupportForm = ({ data, show, onHide, onUpdate }) => {
+
+export const EditSupportAccess = ({ data, show, onHide }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
+    const [values, setValues] = React.useState({ new_password: '', confirm_password: '' });
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState('');
+    const [access, setAccess] = useState(false);
+
+    useEffect(() => {
+        setValues(data);
+        console.log(data);
+        if(data.access_level === 4) setAccess(true)
+    }, [data])
+
+    const onSubmit = async () => {
+        // validate password
+        setError('')
+    
+        // submit the password
+        setLoading(true)
+        let payload = {
+            access_level: (access) ? "4" : "3",
+            auth_id: data?._id
+        }
+        console.log(payload);
+        let reqData = await lib.updateAccess(payload, user?.token)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError);
+            setLoading(false);
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Access updated' })
+            setAccess((reqData.data.access_level === 4) ? true : false);
+            setLoading(false);
+        }
+        console.log(reqData.data);
+    }
+
+    return show ? (
+        <div className="container px-5">
+            <h6 className="mb-1 mt-3">Update Access</h6>
+            <div className="user-form__button-wp">
+                {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
+            </div>
+            {error ? <ErrorMessage message={error} /> : null}
+            <div className="row mt-5">
+                <div className="col-lg-12">
+                    <div className="p-field mb-1">
+                        <ToggleButton value={access} checked={access} onChange={(e) => setAccess(e.value)} onLabel="Access" offLabel="No Access" onIcon="pi pi-check" offIcon="pi pi-times" style={{width: '10em'}} />
+                    </div>
+                </div>
+            </div>
+            <div className="password-update__btn-ctn">
+                <Button onClick={() => onSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Save" />
+            </div>
+        </div>
+    ) : null
+}
+
+const EditSupportForm = ({ data, show, onHide, onUpdated }) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
@@ -189,13 +251,6 @@ const EditSupportForm = ({ data, show, onHide, onUpdate }) => {
             }
             builder.email = values.email
         }
-        // if username
-        if (values.username !== data.username) {
-            if (!values.username) {
-                return setError("User Name is unset")
-            }
-            builder.username = values.username
-        }
 
         // if username
         if (values.area !== data.area) {
@@ -222,7 +277,7 @@ const EditSupportForm = ({ data, show, onHide, onUpdate }) => {
 
         // update
         setLoading(true);
-        let reqData = await lib.update(data?._id, builder, user?.token)
+        let reqData = await lib.updateSupportProfile(data?._id, builder, user?.token)
         setLoading(false)
         // error
         if (reqData.status === 'error') {
@@ -231,7 +286,7 @@ const EditSupportForm = ({ data, show, onHide, onUpdate }) => {
         if (reqData.status === 'ok') {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'update successful' })
             setValues(reqData.data);
-            onUpdate(reqData.data, builder)
+            onUpdated(reqData.data);
         }
     }
 
@@ -273,12 +328,6 @@ const EditSupportForm = ({ data, show, onHide, onUpdate }) => {
                 </div>
                 <div className="col-lg-12">
                     <div className="p-field mb-1">
-                        <label htmlFor="area">Username</label><br />
-                        <InputText style={{ width: '100%' }} id="username" name="username" onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values?.username} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username" />
-                    </div>
-                </div>
-                <div className="col-lg-12">
-                    <div className="p-field mb-1">
                         <label htmlFor="area">Area</label><br />
                         <InputText style={{ width: '100%' }} id="area" name="area" onChange={e => setValues(d => ({ ...d, area: e.target.value }))} value={values?.area} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="Area" />
                     </div>
@@ -299,4 +348,9 @@ const EditSupportForm = ({ data, show, onHide, onUpdate }) => {
     ) : null
 }
 
+
+
+
 export default EditSupportForm
+
+

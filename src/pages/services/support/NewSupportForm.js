@@ -51,7 +51,6 @@ const NewSupportForm = (props = { onSubmit: null, onHide: null, show: false }) =
         setSelectedSupport(e.value);
         setSupportAuth(supportData?.find(val => {
             if (val.name === e.value) {
-                console.log(val);
                 setValues({ ...values, assigned_support_user: val.auth_id })
                 return true;
             } else return false;
@@ -94,16 +93,16 @@ const NewSupportForm = (props = { onSubmit: null, onHide: null, show: false }) =
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-lg-6">
+                    <div className="col-lg-6 dropdown-demo">
                         <div className="p-field mb-1">
                             <label htmlFor="support_type"> Support Type</label><br />
                             <Dropdown id="support_type" name="support_type" value={values?.support_type} options={supportType} onChange={e => setValues(d => ({ ...d, support_type: e.target.value }))} optionLabel="name" placeholder="Select support" />
                         </div>
                     </div>
-                    <div className="col-lg-6">
+                    <div className="col-lg-6 dropdown-demo">
                         <div className="p-field mb-1">
                             <label htmlFor="status"> Status</label><br />
-                            <Dropdown id="status" name="status" value={values?.status} options={status} onChange={e => setValues(d => ({ ...d, status: e.target.value }))} optionLabel="name" placeholder="Select status" />
+                            <Dropdown id="status" name="status"  value={values?.status} options={status} onChange={e => setValues(d => ({ ...d, status: e.target.value }))} optionLabel="name" placeholder="Select status" />
                         </div>
                     </div>
 

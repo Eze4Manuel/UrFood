@@ -91,7 +91,7 @@ const Support = (props) => {
             }, 3000)
         }
     }
-
+    
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
         setLoading(true)
         let reqData = await lib.create(values, user?.token)
@@ -121,7 +121,6 @@ const Support = (props) => {
         setLoader(false)
         setOpenData(true)
     }
-
     const onDeleted = async (id) => {
         // remove from selected
         setSelected(null);
@@ -132,7 +131,6 @@ const Support = (props) => {
         setData(fQeury(d))
         await reload()
     }
-
 
     const changeTab = (val) => {
         switch (val) {

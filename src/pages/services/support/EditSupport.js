@@ -88,7 +88,7 @@ const EditSupport = ({ data, show, onUpdated }) => {
     }
     
     return show ? (
-        <div className="container px-5">
+        <div className="container px-5 dropdown-demo">
             <div className="mb-4 mt-4"><h6>Update support</h6></div>
             <div className="user-form__button-wp">
                 {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
@@ -97,7 +97,7 @@ const EditSupport = ({ data, show, onUpdated }) => {
         
             <div className="p-field mb-2">
                 <label htmlFor="support">Select Support</label><br />
-                <Dropdown style={{ width: '100%', height: '35px' }} value={selectedSupport} options={lazySupportItems} onChange={onLazySupportChange} virtualScrollerOptions={{
+                <Dropdown value={selectedSupport} options={lazySupportItems} onChange={onLazySupportChange} virtualScrollerOptions={{
                     lazy: true, onLazyLoad: onLazySupportLoad, itemSize: 31, showLoader: true, loading: lazySupportLoading, delay: 250, loadingTemplate: (options) => {
                         return (
                             <div className="p-d-flex p-ai-center p-p-2" style={{ height: '21px' }}>
@@ -111,7 +111,7 @@ const EditSupport = ({ data, show, onUpdated }) => {
                 <div className="col-lg-12">
                     <div className="p-field mb-1">
                         <label htmlFor="status">Status</label><br />
-                        <Dropdown style={{ height: "30px", lineHeight: "30px" }} id="status" name="status" value={values?.status} options={status} onChange={e => setValues(d => ({ ...d, status: e.target.value }))} optionLabel="name" placeholder="Select status" />
+                        <Dropdown id="status" name="status" value={values?.status} options={status} onChange={e => setValues(d => ({ ...d, status: e.target.value }))} optionLabel="name" placeholder="Select status" />
                     </div>
                 </div>
             </div>

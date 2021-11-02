@@ -73,7 +73,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             <div className="partner-info__ctn">
                 <div className="partner-info__btn-action-wp">
                     <div className="partner-info__btn-action">
-                        <button onClick={() => onEditPartner()} className="btn btn__edit-ctn btn-action__green">Update Partner Profile</button>
+                        <button onClick={() => onEditPartner()} className="btn btn__edit-ctn btn-action__green">Update Support</button>
                         {/* <button onClick={() => setDelWarning(true)} className="btn btn__edit-ctn btn-action__red">Delete</button> */}
                     </div>
                 </div>m

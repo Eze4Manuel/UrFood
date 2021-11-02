@@ -5,3 +5,10 @@
     align-items: stretch;
     margin-top: 10px;
 }
+.dropdown-demo .p-dropdown {
+    width: 14rem;
+}
+
+.dropdown-demo .country-item-value img.flag {
+    width: 17px;
+}

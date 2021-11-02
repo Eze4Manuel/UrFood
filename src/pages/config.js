@@ -10,6 +10,7 @@ import Transaction from "./transaction/Transaction";
 import Order from './services/Order/Order';
 import Food from './services/Food/Food';
 import Listing from './services/Listing';
+import SupportStaff from './services/support/Support';
 
 // Access 1 - super admin, 2 - admin staff & support
 const pages = config.pages;
@@ -24,5 +25,6 @@ export const routes = [
     {link: pages.transaction, Component: Transaction, access: 2, NavigationBar: Navbar},
     {link: pages.listing, Component: Listing, access: 2, NavigationBar: Navbar},
     {link: pages.order, Component: Order, access: 2, NavigationBar: Navbar},
-    {link: pages.food, Component: Food, access: 2, NavigationBar: Navbar}
+    {link: pages.food, Component: Food, access: 2, NavigationBar: Navbar},
+    {link: pages.supportstaff, Component: SupportStaff, access: 2, NavigationBar: Navbar}
 ]

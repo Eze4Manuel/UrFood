@@ -23,7 +23,8 @@ const config = {
                 {name: 'transactions', icon: 'las la-store-alt', link: conf.pages.transaction},
                 {name: 'dispatch', icon: 'las la-store-alt', link: conf.pages.order},
                 {name: 'listing', icon: 'las la-utensils', link: conf.pages.listing },
-                {name: 'food', icon: 'las la-utensils', link: conf.pages.food}
+                {name: 'food', icon: 'las la-utensils', link: conf.pages.food},
+                {name: 'support', icon: 'las la-utensils', link: conf.pages.supportstaff}
             ]
         },
         {

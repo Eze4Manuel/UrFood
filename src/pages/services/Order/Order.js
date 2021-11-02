@@ -66,10 +66,6 @@ const Order = (props) => {
         })()
     }, [page, set, user?.token])
 
-
-
-
-
     const onSearch = async () => {
         setLoader(true)
         let reqData = await lib.get(1, searchInput, user?.token, user?.px_id)
@@ -83,7 +79,6 @@ const Order = (props) => {
             }, 3000)
         }
     }
-
     
 
     const fetchMore = (page, key, set) => {
@@ -175,7 +170,6 @@ const Order = (props) => {
                     <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["All", "pending", "active", "cancelled", "fulfilled"]} />
                     {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                         <>
-                        {console.log(viewData)}
                             <OrderDetail onDeleted={(id) => onDeleted(id)} data={selected} updateAllData={updateAllData}  show={openData} onHide={() => setOpenData(false)} />
                             <Table
                                 onSelectData={onSelected}

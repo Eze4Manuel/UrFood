@@ -36,7 +36,7 @@ const FoodData = ({ data, show, onHide, onDeleted}) => {
         if (reqData.status === 'ok') {
             onDeleted(data?.auth_id)
             onHide()
-            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'Product deleted'})
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'Item deleted'})
         }   
     }
 

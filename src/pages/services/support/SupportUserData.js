@@ -14,7 +14,7 @@ import { useNotifications } from '@mantine/notifications';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const SupportUserData = ({ data, show, onHide, onDeleted }) => {
+const SupportUserData = ({ data, show, onHide, onDeleted, reload }) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
@@ -30,22 +30,12 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
         setDelWarning(false)
     }, [data])
 
-    const onEditPassword = () => {
-        setShowPartner(false)
-        setShowProfile(false)
-        setShowPassword(true)
-    }
     const onEditPartner = () => {
         setShowPartner(true)
         setShowPassword(false)
         setShowProfile(false)
     }
 
-    const onCancelPasswordEdit = () => {
-        setShowPassword(false)
-        setShowProfile(false)
-        setShowPartner(true)
-    }
     const onCancelProfileEdit = () => {
         setShowPassword(false)
         setShowProfile(false)
@@ -67,8 +57,11 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Vendor deleted' })
         }
     }
-    
-    return (
+
+   
+
+
+    return (    
         <Dialog closeOnEscape header={'Support'} visible={show} modal onHide={() => onHide()} style={{ width: "70vw" }}>
             <div className="partner-info__ctn">
                 <div className="partner-info__btn-action-wp">
@@ -88,7 +81,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
                     </div>
                     <div className="col-5">
                         {/* EDIT Vendor PROFILE */}
-                        <EditSupport onUpdated={(data) => setValues(data)} onHide={() => onCancelProfileEdit()} data={values} show={showPartner} />
+                        <EditSupport onUpdated={(data) => setValues(data)} onHide={() => onCancelProfileEdit()} data={values} show={showPartner} onExit={ () => {  reload(); onHide();}}/>
                     </div>
                 </div>
             </div>

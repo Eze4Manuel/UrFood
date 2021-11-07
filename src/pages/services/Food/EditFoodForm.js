@@ -11,6 +11,7 @@ import { useAuth } from '../../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
+import { InputTextarea } from 'primereact/inputtextarea';
 
 
 
@@ -84,7 +85,7 @@ const EditFoodForm = ({ data, show, onUpdated }) => {
                 <div className="col-sm-12">
                     <div className="p-field mb-2">
                         <label htmlFor="description">Description</label><br />
-                        <InputText style={{ width: '100%' }} id="description" name="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values?.description} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="description" />
+                        <InputTextarea style={{ width: '100%' }} id="description" name="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values?.description} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="description" />
                     </div>
                 </div>
             </div>

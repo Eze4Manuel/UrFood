@@ -14,20 +14,20 @@ import { fShortenNumber } from '../../assets/utils/formatNumber';
 const Dashboard = (props) => {
 
     // const { set, user } = useAuth();
-    const [loader, ] = useState(false);
+    const [loader,] = useState(false);
     // const [page,] = useState(1);
-    const [totalUsers, ] = useState(1);
-    const [userTypes, ] = useState([]);
-    const [totalTransactions, ] = useState([]);
-    const [revenueFor6Months, ] = useState([]);
+    const [totalUsers,] = useState(1);
+    const [userTypes,] = useState([]);
+    const [totalTransactions,] = useState([]);
+    const [revenueFor6Months,] = useState([]);
     // const [, setRevenueByArea] = useState([]);
-    const [revenueByMonth, ] = useState({});
+    const [revenueByMonth,] = useState({});
     // const [, setTotalCustomerRevenue] = useState([]);
-    const [totalPharmacyRevenue, ] = useState({});
+    const [totalPharmacyRevenue,] = useState({});
     // const [, setOrderCount] = useState([]);
     // const [, setOrderStatus] = useState({});
-    const [orderArea, ] = useState([]);
-    const [orderMonth, ] = useState([]);
+    const [orderArea,] = useState([]);
+    const [orderMonth,] = useState([]);
 
     // const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
@@ -168,8 +168,6 @@ const Dashboard = (props) => {
     }) : [{ sn: 0, month: '', dispatch_fee: '', amount: '', total: '' }]
     reveneData.splice(5);
 
-
-
     // const mapStatus = (res) => {
     //     let obj = {
     //         active: 0,
@@ -187,11 +185,11 @@ const Dashboard = (props) => {
 
 
     const userData = (orderArea > 0) ?
-     orderArea?.map((e, ind) => (
-        // { month: e._id, product: e.total, amount: ind + 1, sn: '' }
-        null
-    ))
-     :
+        orderArea?.map((e, ind) => (
+            // { month: e._id, product: e.total, amount: ind + 1, sn: '' }
+            null
+        ))
+        :
         [
             { sn: 1, month: months[currentMonth], product: 0, amount: 0 },
         ]
@@ -202,7 +200,12 @@ const Dashboard = (props) => {
     )) :
         [
             { sn: 1, routes: '0', month: months[currentMonth], product: '0', amount: '0' },
-        ] 
+        ]
+
+    let revenue = `Gross Revenue (${months[currentMonth]})`;
+    let vendorRevenue = `Gross Revenue (${months[currentMonth]})`;
+    let dispatchFeeCurrentMonth = `Dispatch Fee Revenue (${months[currentMonth]})`;
+    let totalOrder = `Total Order (${months[currentMonth]})`;
 
     return (
         <div className='main-content'>
@@ -213,21 +216,30 @@ const Dashboard = (props) => {
                     <div className="product-summary__ctn mt-5">
                         {/* REVENUE */}
                         <div className="row">
-                            <DashboardCard col="3" header="Lifetime Product" value={`${fShortenNumber(revenueByMonth?.total) ?? 0}`} desc="All time Revenue" />
-                            <DashboardCard color='yellow' col="3" header="Lifetime Amount" value={`${fShortenNumber(totalPharmacyRevenue?.total) ?? 0}`} desc="All Partner gross revenue" />
-                            <DashboardCard color='green' col="3" header="Products" value={`${fShortenNumber(totalTransactions?.total) ?? 0}`} desc="Total products" />
-                            <DashboardCard color='green' col="3" header="Amount" value={`${fShortenNumber(totalTransactions?.total) ?? 0}`} desc="Total transactions" />
+                            <DashboardCard col="3" header="Gross Revenue (lifetime)" value={`${fShortenNumber(revenueByMonth?.total) ?? 0}`} desc="All time revenue" />
+                            <DashboardCard color='yellow' col="3" header="Vendor Revenue (lifetime)" value={`${fShortenNumber(totalPharmacyRevenue?.total) ?? 0}`} desc="All time vendor revenue" />
+                            <DashboardCard color='green' col="3" header="Dispatch Fee Revenue (lifetime)" value={`${fShortenNumber(totalTransactions?.total) ?? 0}`} desc="All time dispatch fee revenue" />
+                            <DashboardCard color='red' col="3" header="Total Order (lifetime)" value={`${fShortenNumber(totalTransactions?.total) ?? 0}`} desc="All time orders" />
+                        </div>
+                        <div className="row">
+                            <DashboardCard col="3" header={revenue} value={`${fShortenNumber(revenueByMonth?.total) ?? 0}`} desc="Current Month revenue" />
+                            <DashboardCard color='yellow' col="3" header={vendorRevenue} value={`${fShortenNumber(totalPharmacyRevenue?.total) ?? 0}`} desc="Current Month vendor revenue" />
+                            <DashboardCard color='green' col="3" header={dispatchFeeCurrentMonth} value={`${fShortenNumber(totalTransactions?.total) ?? 0}`} desc="Current Month Dispatch Fee" />
+                            <DashboardCard color='green' col="3" header={totalOrder} value={`${fShortenNumber(totalTransactions?.total) ?? 0}`} desc="Current Month Order" />
                         </div>
                         {/* ORDERS */}
                         <div className="row mt-5">
                             <DashboardCard color='red' col="3" header="Users" value={totalUsers?.total ?? 0} desc="Total users" />
-                            <DashboardCard color='green' col="3" header="Partners" value={userTypes[1]?.total ?? 0} desc="Total Support" />
-                            <DashboardCard color='blue' col="3" header="Dispatchers" value={userTypes[0]?.total ?? 0} desc="Delivery personnel" />
-                            <DashboardCard color='yellow' col="3" header="Support" value={userTypes[2]?.total ?? 0} desc="Listed partner pharmacies" />
+                            <DashboardCard color='green' col="3" header="Customers" value={userTypes[1]?.total ?? 0} desc="Total Customers" />
+                            <DashboardCard color='blue' col="3" header="Vendors" value={userTypes[0]?.total ?? 0} desc="Total Listed Food Vendros" />
+                            <DashboardCard color='yellow' col="3" header="Dispatchers" value={userTypes[2]?.total ?? 0} desc="Total Delivery Personnel" />
                         </div>
                         <div className="row mb-5 pb-5">
-                            <DashbaordTable data={userData} col="12" dataRow={['sn', 'month', 'product', 'amount']} header="Dispatch" headerRow={['#', 'Months', 'Product', 'Amount']} />
-                            <DashbaordTable col="12" data={userData2} dataRow={[ 'sn', 'routes', 'month', 'product', 'amount']} header="Routes" headerRow={[ '#', 'Routes', 'Months', 'Product', 'Amount']} />
+                            <DashbaordTable data={userData} col="12" dataRow={['sn', 'month', 'product', 'amount']} header="Dispatch" headerRow={['#', 'Months', 'Items', 'Amount']} />
+                            <DashbaordTable col="12" data={userData2} dataRow={['sn', 'routes', 'month', 'product', 'amount']} header="Routes" headerRow={['#', 'Routes', 'Months', 'Items', 'Amount']} />
+                            <DashbaordTable data={userData} col="12" dataRow={['sn', 'month', 'amount']} header="Revenue for last 6 months" headerRow={['#', 'Months', 'Total Amount']} />
+                            <DashbaordTable col="6" data={userData2} dataRow={['sn', 'month', 'product', 'amount']} header="Orders for last 6 months" headerRow={['#', 'Months', 'Items', 'Amount']} />
+                            <DashbaordTable col="6" data={userData2} dataRow={['sn', 'month', 'product', 'amount']} header="Orders for last 6 months by area" headerRow={['#', 'Months', 'Amount', 'Area']} />
                         </div>
                     </div>
                 </div>

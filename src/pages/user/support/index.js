@@ -61,7 +61,7 @@ const Support = (props) => {
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
             setData(reqData.data)
         } 
-    } 
+    }
 
     const onSearch = async () => {
         setLoader(true)

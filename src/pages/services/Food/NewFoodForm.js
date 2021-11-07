@@ -8,6 +8,7 @@ import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidation';
+import { InputTextarea } from 'primereact/inputtextarea';
 
 const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
@@ -51,7 +52,7 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                     <div className="col-lg-6">
                         <div className="p-field mb-1">
                             <label htmlFor="description">Description</label><br />
-                            <InputText style={{ width: '100%' }} id="description" name="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values?.description} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="description" />
+                            <InputTextarea style={{ width: '100%' }} id="description" name="description" onChange={e => setValues(d => ({ ...d, description: e.target.value }))} value={values?.description} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="description" />
                         </div>
                     </div>
                     <div className="col-lg-6">

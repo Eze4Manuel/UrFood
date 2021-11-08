@@ -134,31 +134,28 @@ export const EditPassword = ({ data, show, onHide }) => {
 }
 
 
-export const EditSupportAccess = ({ data, show, onHide }) => {
+export const EditSupportAccess = ({ data, show }) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
-    const [values, setValues] = React.useState({ new_password: '', confirm_password: '' });
+    const [values, setValues] = React.useState({ });
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
     const [access, setAccess] = useState(false);
 
     useEffect(() => {
         setValues(data);
-        console.log(data);
         if(data.access_level === 4) setAccess(true)
     }, [data])
 
     const onSubmit = async () => {
         // validate password
         setError('')
-    
         // submit the password
         setLoading(true)
         let payload = {
             access_level: (access) ? "4" : "3",
             auth_id: data?._id
         }
-        console.log(payload);
         let reqData = await lib.updateAccess(payload, user?.token)
         // error
         if (reqData.status === 'error') {
@@ -168,9 +165,9 @@ export const EditSupportAccess = ({ data, show, onHide }) => {
         if (reqData.status === 'ok') {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Access updated' })
             setAccess((reqData.data.access_level === 4) ? true : false);
+            setValues(reqData.data);
             setLoading(false);
         }
-        console.log(reqData.data);
     }
 
     return show ? (
@@ -183,7 +180,8 @@ export const EditSupportAccess = ({ data, show, onHide }) => {
             <div className="row mt-5">
                 <div className="col-lg-12">
                     <div className="p-field mb-1">
-                        <ToggleButton value={access} checked={access} onChange={(e) => setAccess(e.value)} onLabel="Access" offLabel="No Access" onIcon="pi pi-check" offIcon="pi pi-times" style={{width: '10em'}} />
+                        <label style={{flex: "0"}}>Current access level: {values?.access_level}</label>
+                        <ToggleButton value={access} checked={access} onChange={(e) => setAccess(e.value)} onLabel={`Revoke Access`} offLabel={`Grant Access`} offIcon="pi pi-times" style={{width: '15em', flex: "0" }} />
                     </div>
                 </div>
             </div>

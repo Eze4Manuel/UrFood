@@ -14,25 +14,34 @@ const Login = (props) => {
     const [error, setError] = useState('')
     const [values, setValues] = useState({ username: '', password: ''})
 
+    const validate =  (emailAdress) =>
+    {
+      let regexEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      if (emailAdress.match(regexEmail)) {
+        return true; 
+      } else {
+        return false; 
+      }
+    }
+    
     const onSubmit = async (e) => {
         let userData = {}
         // check phone_number
-        if (!values.phone_number) {
-            setError('phone number is required')
+        if (!values.login) {
+            setError('phone number or username is required')
             return
         }
-        userData.phone_number = values.phone_number
-        
-        // check password
-        if (!values.password) {
-            setError('password is required')
-            return
+        if(validate(values.login)){
+            userData.email = values?.login
+        }else{
+            userData.phone_number = values?.login
         }
-        userData.password = values.password
+        userData.password = values.password;
+
         // set user type
-        let userType = values.phone_number.toLowerCase() === '08111111111' ? 'superadmin' : 'admin'
+        let userType = values.login.toLowerCase() === '08111111111' ? 'superadmin' : 'admin'
         userData.user_type = userType
-        
+
         setError('')
         setLoading(true)
         try {
@@ -67,8 +76,8 @@ const Login = (props) => {
                             <div className="row">
                                     <div className="col-lg-12">
                                         <div className="p-field mb-2">
-                                            <label htmlFor="phone_number">Phone Number</label><br />
-                                            <InputText style={{width: '100%'}} id="phone_number" name="phone_number" onChange={e => setValues(d => ({...d, phone_number: e.target.value}))} autoFocus value={values.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="phone_number" />
+                                            <label htmlFor="login">Username or Phone Number</label><br />
+                                            <InputText style={{width: '100%'}} id="login" name="login" onChange={e => setValues(d => ({...d, login: e.target.value}))} autoFocus value={values.login} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username/phone_number" />
                                         </div>
                                     </div>
                                     <div className="col-lg-12">

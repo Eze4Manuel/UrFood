@@ -177,7 +177,7 @@ const NewListingFoodForm = (props = { onSubmit: null, onHide: null, show: false 
                     </div>
                     <div className="col-lg-6 dropdown-demo">
                         <div className="p-field mb-2">
-                            <label htmlFor="discount_type">Discount Type*</label><br />
+                            <label htmlFor="discount_type">Discount Type</label><br />
                             <Dropdown value={{ name: values?.discount_type, code: values?.discount_type }} options={discount} name="discount_type" onChange={e => setValues(d => ({ ...d, discount_type: e.value.code }))} optionLabel="name" placeholder="Discount Type" />
                         </div>
                     </div>

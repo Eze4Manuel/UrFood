@@ -46,13 +46,11 @@ lib.getTransactionsSummary = async (token, component, year) => {
     }
 }
 
-lib.getOrderSummary = async (token, component) => {
+lib.getOrderSummary = async (token, component, year) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-
-        uri = `/orders?component=${component}`;
-
+        uri = `/orders/admin?component=${component}&year=${year}`;
         return await (await request.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }

@@ -14,16 +14,6 @@ import Alert from '../../../components/flash/Alert';
 import helpers from '../../../core/func/Helpers';
 import Tabs from "../../../components/tabs/Tabs";
 
-const noDataTitle = "You haven't created any support account yet.";
-const noDataParagraph = "You can create a support yourself by clicking on the button Add support.";
-
-const fQeury = (data) => {
-    return data?.map(d => {
-        return {
-            ...d,
-        }
-    })
-}
 
 const Support = (props) => {
     const { set, user } = useAuth();
@@ -38,43 +28,120 @@ const Support = (props) => {
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
-
+    const [supportDetail, setSupportDetail] = useState([]);
     const [processedData, setProcessedData] = useState([]);
     const [order, setOrder] = useState("All");
+
+
+    const noDataTitle = "You haven't created any support account yet.";
+    const noDataParagraph = "You can create a support yourself by clicking on the button Add support.";
+
+    const processStatus = (num) => {
+        switch (num) {
+            case 1:
+                return 'pending';
+            case 2:
+                return 'active';
+            case 3:
+                return 'resolved';
+            case 4:
+                return 'unresolved';
+            default:
+                return num;
+        }
+    }
+
+    const fQeury = (data) => {
+        return data?.map(d => {
+            return {
+                ...d,
+                status_state: processStatus(d.status)
+            }
+        })
+    }
+
+    const PQeury = (data) => {
+        return data?.map(d => {
+            return {
+                name: d.name,
+                auth_id: d.auth_id,
+            }
+        })
+    }
+
+    // appends support user to various support listing if there exists
+    const MQeury = (data) => {
+        return data?.map(d => {
+            supportDetail?.forEach(e => {
+                if (d.assigned_support_user === e.auth_id) {
+                    d.support_user_name = e.name
+                    return d;
+                }
+            })
+            return d;
+        })
+    }
+
+    // Attaches support username to 
+    const SelectedQuery = (d) => {
+        supportDetail?.forEach(e => {
+            if (d.assigned_support_user === e.auth_id) {
+                d.support_user_name = e.name
+                return d;
+            }
+        })
+        return d;
+    }
 
     // data 
     useEffect(() => {
         (async () => {
             setLoader(true)
-            let reqData = await lib.get(page, null, user?.token, 'vendor')
+            let reqData = await lib.get(page, null, user?.token, 'vendor');
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                setData(fQeury(reqData.data));
-                setProcessedData(fQeury(reqData.data));
+                let reqData2 = await lib.getAdminSupports(user?.token)
+                if (reqData2.status === "error") {
+                    helpers.sessionHasExpired(set, reqData2.msg)
+                }
+                if (reqData2.status === 'ok') {
+                    setSupportDetail(PQeury(reqData2.data));
+                    setData(fQeury(reqData.data));
+                    setProcessedData(fQeury(reqData.data));
+                }
+                setLoader(false)
             }
-            setLoader(false);
         })();
-    }, [user?.token, page, set])
+    }, [user?.token, page, set ])
+
 
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data.length, perPage);
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
-    const viewData = data.slice(start, stop);
+    const viewData = MQeury(processedData?.slice(start, stop));
 
     const reload = async () => {
         setLoader(true)
         let reqData = await lib.get(1, null, user?.token)
         setLoader(false)
         if (reqData.status === "error") {
-            helpers.sessionHasExpired(set, reqData.msg)
+            helpers.sessionHasExpired(set, reqData.msg);
         }
-        if (reqData.status === 'ok' && reqData?.data?.length > 0) {
-            setData(fQeury(reqData.data))
-            
+        if (reqData.status === 'ok') {
+            let reqData2 = await lib.getAdminSupports(user?.token)
+            if (reqData2.status === "error") {
+                helpers.sessionHasExpired(set, reqData2.msg)
+            }
+            if (reqData2.status === 'ok') {
+                setSupportDetail(PQeury(reqData2.data));
+                setData(fQeury(reqData.data));
+                setProcessedData(fQeury(reqData.data));
+            }
+            setLoader(false)
         }
     }
 
@@ -83,15 +150,15 @@ const Support = (props) => {
         let reqData = await lib.get(1, searchInput, user?.token, 'support')
         setLoader(false)
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
-            setData(fQeury(reqData.data))
+            setData(fQeury(reqData.data));
         } else {
-            setNotFound(true)
+            setNotFound(true);
             setTimeout(() => {
-                setNotFound(false)
+                setNotFound(false);
             }, 3000)
         }
     }
-    
+
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
         setLoading(true)
         let reqData = await lib.create(values, user?.token)
@@ -100,36 +167,37 @@ const Support = (props) => {
             helpers.sessionHasExpired(set, reqData.msg, setError)
         }
         if (reqData.status === "ok") {
-            setValues(resetData)
-            setOpenForm(false)
-            setData([...reqData.data, ...data])
-            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support account created' })
+            setValues(resetData);
+            setOpenForm(false);
+            setData([...reqData.data, ...data]);
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support account created' });
             await reload();
         }
     }
 
     const fetchMore = (page, key, set) => {
-        onSetPage(page, key, set)
+        onSetPage(page, key, set);
     }
 
     const onSelected = async (value) => {
         setLoader(true)
         let reqData = await lib.getOne(value?._id, user?.token)
         if (reqData.status === 'ok' && reqData?.data) {
-            setSelected(reqData.data)
+            setSelected(SelectedQuery(reqData.data));
         }
         setLoader(false)
         setOpenData(true)
     }
+
     const onDeleted = async (id) => {
         // remove from selected
         setSelected(null);
         // close modal
-        setOpenData(false)
+        setOpenData(false);
         // remove from data list
         let d = data?.filter(val => (String(val?.auth_id) !== String(id)))
-        setData(fQeury(d))
-        await reload()
+        setData(fQeury(d));
+        await reload();
     }
 
     const changeTab = (val) => {
@@ -166,6 +234,7 @@ const Support = (props) => {
                 break
         }
     }
+
     return (
         <div className="main-content">
             <main>
@@ -190,32 +259,27 @@ const Support = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
-                <SupportUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                <SupportUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} reload={() => reload()} />
                 {
-                    viewData.length > 0
-                        ? (
+                    data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
 
-                            <div className="support-table__container">
-                                <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["All", "pending", "active", "resolved", "unresolved"]} />
-
-                                <Table
-                                    onSelectData={onSelected}
-                                    prev={() => fetchMore(page, 'prev', setPage)}
-                                    next={() => fetchMore(page, 'next', setPage)}
-                                    goTo={(id) => goTo(id, setActivePages)}
-                                    activePage={activePage}
-                                    pages={paginate}
-                                    data={processedData}
-                                    perPage={perPage}
-                                    route="" // {config.pages.user}
-                                    tableTitle="Support"
-                                    tableHeader={['#', 'ID', 'Title', 'Support Type', 'Status']}
-                                    dataFields={['_id', 'title', 'support_type', 'status']}
-                                />
-                            </div>
-                        )
-                        : null
+                        <div className="support-table__container">
+                            <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["All", "pending", "active", "resolved", "unresolved"]} />
+                            <Table
+                                onSelectData={onSelected}
+                                prev={() => fetchMore(page, 'prev', setPage)}
+                                next={() => fetchMore(page, 'next', setPage)}
+                                goTo={(id) => goTo(id, setActivePages)}
+                                activePage={activePage}
+                                pages={paginate}
+                                data={viewData}
+                                perPage={perPage}
+                                route="" // {config.pages.user}
+                                tableTitle="Support"
+                                tableHeader={['#', 'ID', 'Title', 'Support Type', 'Support Username', 'Status']}
+                                dataFields={['_id', 'title', 'support_type', 'support_user_name', 'status_state']}
+                            />
+                        </div>
                 }
             </main>
         </div>

@@ -77,13 +77,13 @@ const EditFoodListingForm = ({ data, show, onUpdated }) => {
             <div className="row ">
                 <div className="col-lg-12 dropdown-demo">
                     <div className="p-field mb-2">
-                        <label htmlFor="discount_type">Discount Type*</label><br />
+                        <label htmlFor="discount_type">Discount Type</label><br />
                         <Dropdown value={{name: values?.discount_type, code: values?.discount_type}} options={discount} name="discount_type" onChange={e => setValues(d => ({ ...d, discount_type: e.value.code }))} optionLabel="name" placeholder="Discount Type" />
                     </div>
                 </div>
                 <div className="col-lg-12">
                     <div className="p-field mb-2">
-                        <label htmlFor="discount_amount">Discount Amount*</label><br />
+                        <label htmlFor="discount_amount">Discount Amount</label><br />
                         <InputText style={{ width: '100%' }} id="discount_amount" name="discount_amount" type="text" onChange={e => setValues(d => ({ ...d, discount_amount: e.target.value }))} value={values?.discount_amount} className="p-inputtext-sm p-d-block p-mb-2" placeholder="discount_amount" />
                     </div>
                 </div>

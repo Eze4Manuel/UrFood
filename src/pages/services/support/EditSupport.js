@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './NewSupportForm.css';
-import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
@@ -13,14 +12,14 @@ import helpers from '../../../core/func/Helpers';
 import { Dropdown } from 'primereact/dropdown';
 import { Skeleton } from 'primereact/skeleton';
 
-const EditSupport = ({ data, show, onUpdated }) => {
+const EditSupport = ({ data, show, onHide, onUpdated, onExit}) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
 
-    const [supportAuth, setSupportAuth] = useState('');
+    const [, setSupportAuth] = useState('');
     const [selectedSupport, setSelectedSupport] = useState(null);
     const [supportData, setSupportData] = useState(null);
     const [lazySupportItems, setLazySupportItems] = useState([]);
@@ -29,11 +28,6 @@ const EditSupport = ({ data, show, onUpdated }) => {
     React.useEffect(() => {
         setValues(data)
     }, [data])
-
-    const supportType = [
-        { name: 'faq', code: 'faq' },
-        { name: 'help', code: 'help' },
-    ];
 
     const status = [
         { name: 'pending', code: '1' },
@@ -57,10 +51,10 @@ const EditSupport = ({ data, show, onUpdated }) => {
             helpers.sessionHasExpired(set, reqData?.msg, setError)
         }
         if (reqData.status === 'ok') {
-            console.log(reqData.data);
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'update successful' })
             setValues({ ...data, ...reqData.data })
             onUpdated({ ...data, ...reqData.data })
+            onExit();
         }
     }
 

@@ -19,7 +19,7 @@ const NewSupportForm = (props = { onSubmit: null, onHide: null, show: false }) =
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
     const { set, user } = useAuth();
-    const [supportAuth, setSupportAuth] = useState('');
+    const [, setSupportAuth] = useState('');
     const [selectedSupport, setSelectedSupport] = useState(null);
     const [supportData, setSupportData] = useState(null);
     const [lazySupportItems, setLazySupportItems] = useState([]);

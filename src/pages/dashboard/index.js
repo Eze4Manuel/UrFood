@@ -33,21 +33,6 @@ const Dashboard = (props) => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
 
-    // // Getting Transaction summary by type
-    // useEffect(() => {
-    //     (async () => {
-    //         setLoader(true)
-    //         let reqData = await lib.getUsers(user?.token, 'type')
-    //         if (reqData.status === "error") {
-    //             helpers.sessionHasExpired(set, reqData.msg)
-    //         }
-    //         if (reqData.status === 'ok') {
-    //             setUserTypes(reqData.data);
-    //         }
-    //         setLoader(false);
-    //     })()
-    // }, [user?.token, page, set])
-
 
     // Getting All Users by count
     useEffect(() => {
@@ -78,19 +63,6 @@ const Dashboard = (props) => {
             setLoader(false);
         })()
     }, [user?.token, page, set])
-
-
-    // // Getting Transaction summary by count
-    // useEffect(() => {
-    //     (async () => {
-    //         setLoader(true)
-    //         let reqData = await lib.getTransactionsSummary(user?.token, 'count', currentYear)
-    //         if (reqData.status === 'ok') {
-    //             setTotalTransaction(reqData.data[0])
-    //         }
-    //         setLoader(false)
-    //     })()
-    // }, [user?.token, page, set, currentYear])
 
     // Getting Transaction summary by customer
     useEffect(() => {
@@ -164,7 +136,7 @@ const Dashboard = (props) => {
     const months = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     let reveneData = revenueFor6Months.length > 0 ? revenueFor6Months?.map((e, ind) => {
-        return { sn: ind + 1 ,month: months[e._id], dispatch_fee: e.dispatch_fee, amount: e.amount, total: e.total }
+        return { sn: ind + 1, month: months[e._id], dispatch_fee: e.dispatch_fee, amount: e.amount, total: e.total }
     }) : [{ sn: 0, name: '', month: '', dispatch_fee: '', amount: '', total: '' }]
     reveneData.splice(5);
 
@@ -230,7 +202,7 @@ const Dashboard = (props) => {
 
 
     let revenue = `Gross Revenue (${months[currentMonth]})`;
-    let vendorRevenue = `Gross Revenue (${months[currentMonth]})`;
+    let vendorRevenue = `Vendor Revenue (${months[currentMonth]})`;
     let dispatchFeeCurrentMonth = `Dispatch Fee Revenue (${months[currentMonth]})`;
     let totalOrder = `Total Order (${months[currentMonth]})`;
 
@@ -249,9 +221,10 @@ const Dashboard = (props) => {
                             <DashboardCard color='red' col="3" header="Total Order (lifetime)" value={`${fShortenNumber(orderCount?.total) ?? 0}`} desc="All time orders" />
                         </div>
                         <div className="row">
+                        {console.log(revenueByMonth)}
                             <DashboardCard col="3" header={revenue} value={`${fShortenNumber(revenueByMonth?.total) ?? 0}`} desc="Current Month revenue" />
                             <DashboardCard color='yellow' col="3" header={vendorRevenue} value={`${fShortenNumber(totalPharmacyRevenue?.total) ?? 0}`} desc="Current Month vendor revenue" />
-                            <DashboardCard color='green' col="3" header={dispatchFeeCurrentMonth} value={`${fShortenNumber(totalTransactions?.total) ?? 0}`} desc="Current Month Dispatch Fee" />
+                            <DashboardCard color='green' col="3" header={dispatchFeeCurrentMonth} value={`${fShortenNumber(revenueByMonth?.dispatch_fee) ?? 0}`} desc="Current Month Dispatch Fee" />
                             <DashboardCard color='green' col="3" header={totalOrder} value={`${fShortenNumber(orderCurrentMonth?.total) ?? 0}`} desc="Current Month Order" />
                         </div>
                         {/* ORDERS */}
@@ -265,9 +238,7 @@ const Dashboard = (props) => {
                             <DashbaordTable col="12" data={userData2} dataRow={['sn', 'routes', 'month', 'product', 'amount']} header="Routes" headerRow={['#', 'Routes', 'Months', 'Items', 'Amount']} />
                             <DashbaordTable dataRow={['sn', 'month', 'amount', 'dispatch_fee', 'total']} data={reveneData} header="Revenue For Last 6 months" headerRow={['#', 'Month', 'Amount', 'Dispatch Fee', 'Total']} />
                             <DashbaordTable dataRow={['sn', 'name', 'amount', 'dispatch_fee', 'total']} data={reveneArea} header="Revenue By Vendor" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} />
-
                             <DashbaordTable col="6" data={userStatus} dataRow={['sn', 'status', 'total']} header="Orders Status" headerRow={['#', 'Status', 'Total']} />
-                            <DashbaordTable col="6" data={userMonths} dataRow={['sn', 'month', 'total']} header="Orders for last 6 months" headerRow={['#', 'Months', 'Total']} />
                             <DashbaordTable col="6" data={userArea} dataRow={['sn', 'area', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'Total']} />
                         </div>
                     </div>

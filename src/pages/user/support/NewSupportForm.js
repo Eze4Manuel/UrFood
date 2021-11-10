@@ -80,7 +80,12 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                     </div>
                 </div>
                 <div className="row">
-                    
+                    <div className="col-lg-6">
+                        <div className="p-field mb-1">
+                            <label htmlFor="username">Username*</label><br />
+                            <InputText id="username" name="username" type="text" onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values.username} className="p-inputtext-sm" placeholder="username" />
+                        </div>
+                    </div>
                     <div className="col-lg-6">
                         <div className="p-field mb-1">
                             <label htmlFor="password">Password*</label><br />
@@ -88,7 +93,6 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                         </div>
                     </div>
                 </div>
-
                 <div className="user-form__button-wp">
                     <Button onClick={() => props.onSubmit({ ...values, user_type: 'attendant' }, setLoading, setError, setValues, config.userData)} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
                 </div>

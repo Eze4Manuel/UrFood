@@ -12,6 +12,7 @@ const SupportUserDetail = ({ data }) => {
             </div>
             <div className="my-3">
                 <h6 className="mb-3">Contact Information</h6>
+                <p className="user-info__detail"><span>Username</span> <span>{data?.username}</span></p>
                 <p className="user-info__detail"><span>Email</span> <span>{data?.email}</span></p>
                 <p className="user-info__detail"><span>Phone</span> <span>{data?.phone_number}</span></p>
                 <p className="user-info__detail"><span>Area</span> <span>{data?.area}</span></p>

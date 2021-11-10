@@ -40,7 +40,7 @@ const Support = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                setData(reqData.data)
+                setData(reqData.data);
             }
             setLoader(false);
         })()
@@ -167,8 +167,8 @@ const Support = (props) => {
                                         perPage={perPage}
                                         route="" // {config.pages.user}
                                         tableTitle="Support" 
-                                        tableHeader={['#','ID', 'First Name', 'Last Name', "Phone"]}
-                                        dataFields={['auth_id', "first_name", 'last_name', 'phone_number']}
+                                        tableHeader={['#','ID', 'First Name', 'Last Name', "Phone", "Username"]}
+                                        dataFields={['auth_id', "first_name", 'last_name', 'phone_number', 'username']}
                                     />                                    
                                 )
                                 : null

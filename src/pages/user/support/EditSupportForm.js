@@ -137,14 +137,14 @@ export const EditPassword = ({ data, show, onHide }) => {
 export const EditSupportAccess = ({ data, show }) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
-    const [values, setValues] = React.useState({ });
+    const [values, setValues] = React.useState({});
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
     const [access, setAccess] = useState(false);
 
     useEffect(() => {
         setValues(data);
-        if(data.access_level === 4) setAccess(true)
+        if (data.access_level === 4) setAccess(true)
     }, [data])
 
     const onSubmit = async () => {
@@ -180,8 +180,8 @@ export const EditSupportAccess = ({ data, show }) => {
             <div className="row mt-5">
                 <div className="col-lg-12">
                     <div className="p-field mb-1">
-                        <label style={{flex: "0"}}>Current access level: {values?.access_level}</label>
-                        <ToggleButton value={access} checked={access} onChange={(e) => setAccess(e.value)} onLabel={`Revoke Access`} offLabel={`Grant Access`} offIcon="pi pi-times" style={{width: '15em', flex: "0" }} />
+                        <label style={{ flex: "0" }}>Current access level: {values?.access_level}</label>
+                        <ToggleButton value={access} checked={access} onChange={(e) => setAccess(e.value)} onLabel={`Revoke Access`} offLabel={`Grant Access`} offIcon="pi pi-times" style={{ width: '15em', flex: "0" }} />
                     </div>
                 </div>
             </div>
@@ -250,14 +250,16 @@ const EditSupportForm = ({ data, show, onHide, onUpdated }) => {
             builder.email = values.email
         }
 
-        // if username
+        // if area
         if (values.area !== data.area) {
             if (!values.area) {
                 return setError("Area is unset")
             }
             builder.area = values.area
         }
-        
+
+
+
         // check Address
         if (values.address !== data.address) {
             if (values.address) {
@@ -267,7 +269,14 @@ const EditSupportForm = ({ data, show, onHide, onUpdated }) => {
                 builder.address = values.address
             }
         }
-        
+
+        // check username
+        if (values.username !== data.username) {
+            if (!values.username) {
+                return setError("Username is unset")
+            }
+            builder.username = values.username
+        }
 
         if (Object.keys(builder).length === 0) {
             return setError("No changes to update")
@@ -308,6 +317,12 @@ const EditSupportForm = ({ data, show, onHide, onUpdated }) => {
                         <InputText style={{ width: '100%' }} id="last_name" name="last_name" type="text" onChange={e => setValues(d => ({ ...d, last_name: e.target.value }))} value={values?.last_name} className="p-inputtext-sm p-d-block p-mb-2" placeholder="last name" />
                     </div>
                 </div>
+                <div className="col-lg-12">
+                    <div className="p-field mb-2">
+                        <label htmlFor="username">Username</label><br />
+                        <InputText style={{ width: '100%' }} id="username" name="username" type="text" onChange={e => setValues(d => ({ ...d, username: e.target.value }))} value={values?.username} className="p-inputtext-sm p-d-block p-mb-2" placeholder="username" />
+                    </div>
+                </div>
             </div>
             <div className="row">
                 <div className="col-sm-12">
@@ -339,16 +354,13 @@ const EditSupportForm = ({ data, show, onHide, onUpdated }) => {
                     </div>
                 </div>
             </div>
+
             <div className="user-form__button-wp">
                 <Button onClick={() => onSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Update" />
             </div>
         </div>
     ) : null
 }
-
-
-
-
 export default EditSupportForm
 
 

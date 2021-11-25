@@ -17,7 +17,7 @@ const Login = (props) => {
     const [values, setValues] = useState({ username: '', password: ''})
 
     const validate =  (phone) =>
-    {   
+    {    
       if (!isNaN(phone)) {
         return true; 
       } else {

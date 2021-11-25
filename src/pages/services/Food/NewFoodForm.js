@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './NewFoodForm.css';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -10,11 +10,18 @@ import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidation';
 import { InputTextarea } from 'primereact/inputtextarea';
 
+import { Toast } from 'primereact/toast';
+import { FileUpload } from 'primereact/fileupload';
+import { ProgressBar } from 'primereact/progressbar';
+import { Tooltip } from 'primereact/tooltip';
+import { Tag } from 'primereact/tag';
+
 const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [city,] = useState(null);
+    const toast = useRef(null);
 
 
     const handleSubmit = () => {
@@ -26,8 +33,19 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
         props.onSubmit(builder, setLoading, setError, setValues, config.userData)
     }
 
+    const onUpload = () => {
+
+        toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+    }
+    const myUploader = (event) => {
+        //event.files == files to upload
+        console.log(event);
+    }
+
     return (
         <Dialog header="New Food" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "45vw" }}>
+            <Toast ref={toast}></Toast>
+
             <div>
                 <div className="user-form__button-wp">
                     {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
@@ -74,6 +92,20 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                         </div>
                     </div>
                 </div>
+
+
+                <div className="row">
+                    <div className="col-lg-12">
+                        <label htmlFor="city">Upload Image</label><br />
+                        <div className="card">
+                            <FileUpload name="demo[]" url="https://primefaces.org/primereact/showcase/upload.php" onUpload={onUpload} multiple accept="image/*" maxFileSize={1000000}
+                                emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>}  customUpload uploadHandler={myUploader} />
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <div className="partner-form__button-wp">
                     <Button onClick={() => handleSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
                 </div>

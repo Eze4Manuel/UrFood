@@ -7,17 +7,15 @@ import request from '../../assets/utils/http-request';
 import { useAuth } from '../../core/hooks/useAuth';
 import ErrorMessage from '../../components/error/ErrorMessage'
 import Helpers from '../../core/func/Helpers';
-import { isNumeral } from 'numeral';
-import { isNumeric } from 'jquery';
 
 const Login = (props) => {
     const { set } = useAuth();
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
-    const [values, setValues] = useState({ username: '', password: ''})
+    const [values, setValues] = useState({ login: '', password: ''})
 
     const validate =  (phone) =>
-    {    
+    {
       if (!isNaN(phone)) {
         return true; 
       } else {
@@ -36,8 +34,17 @@ const Login = (props) => {
             userData.username = values?.login
         }else{
             userData.phone_number = values?.login
+            if(userData.phone_number.length > 11 || userData.phone_number.length > 11 ){
+                setError('Phone number is incorrect');
+                return;
+            }
         }
-        userData.password = values.password;
+        if (!values.password) {
+            setError('Password is required')
+            return
+        }else{
+            userData.password = values.password;
+        }
 
 
         // set user type
@@ -49,7 +56,6 @@ const Login = (props) => {
         try {
             let reqData = await (await request.post('/auth/login', userData)).data
             setLoading(false)
-            console.log(reqData);
             if (reqData.status === 'error') {
                 setError(reqData?.msg)
             }
@@ -79,7 +85,7 @@ const Login = (props) => {
                                     <div className="col-lg-12">
                                         <div className="p-field mb-2">
                                             <label htmlFor="login">Username or Phone Number</label><br />
-                                            <InputText style={{width: '100%'}} id="login" name="login" onChange={e => setValues(d => ({...d, login: e.target.value}))} autoFocus value={values.login} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username/phone_number" />
+                                            <InputText style={{width: '100%'}} id="login" name="login" onChange={e => setValues(d => ({...d, login: e.target.value}))} autoFocus value={values.login} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="username or phone_number" />
                                         </div>
                                     </div>
                                     <div className="col-lg-12">

@@ -137,14 +137,14 @@ export const EditPassword = ({ data, show, onHide }) => {
 export const EditSupportAccess = ({ data, show }) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
-    const [values, setValues] = React.useState({});
+    const [values, setValues] = React.useState(data);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
     const [access, setAccess] = useState(false);
 
     useEffect(() => {
         setValues(data);
-        if (data.access_level === 4) setAccess(true)
+        if (data?.access_level === 4) setAccess(true)
     }, [data])
 
     const onSubmit = async () => {

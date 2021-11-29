@@ -11,7 +11,7 @@ import Sidebar from '../components/navigation/Sidebar';
 import { routes } from './config';
 import Navbar from '../components/navigation/Navbar';
 import config from '../assets/utils/config';
-import Setting from './settings/Setting';
+import Order from './services/Order/Order';
 
 export const getInitialRoutePage = (user) => {
   return user?.user_type === 'superadmin'
@@ -41,7 +41,7 @@ const App = (props) => {
         <Sidebar msgs={msgs} user={user} />
         <Switch>
           <Route exact path='/'>
-            {fullAccess ? <Dashboard NavigationBar={Navbar} {...props} /> : <Setting NavigationBar={Navbar} {...props} />}
+            {fullAccess ? <Dashboard NavigationBar={Navbar} {...props} /> : <Order NavigationBar={Navbar} {...props} />}
           </Route>
           {renderedRoutes}
           <Route>

@@ -87,7 +87,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted, update }) => {
         // error
         if (reqData.status === 'error') {
             helpers.sessionHasExpired(set, reqData?.msg, setError)
-        }
+        } 
         if (reqData.status === 'ok') {
             onDeleted(data?.auth_id)
             onHide()

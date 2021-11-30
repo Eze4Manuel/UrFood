@@ -8,6 +8,7 @@
     padding: 1rem 1.5rem;
     background: var(--color-main);
     color: #fff;
+    overflow: scroll;
 }
 
 .hide_sidebar {

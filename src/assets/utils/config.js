@@ -4,7 +4,7 @@ const pages = {}
 pages.login = '/';
 pages.dashboard = '/dashboard';
 
-const config = {
+const config = { 
     api: {
         login: '/auth/login',
         logout: '/auth/logout'

@@ -7,6 +7,8 @@ import request from '../../assets/utils/http-request';
 import { useAuth } from '../../core/hooks/useAuth';
 import ErrorMessage from '../../components/error/ErrorMessage'
 import Helpers from '../../core/func/Helpers';
+import { isNumeral } from 'numeral';
+import { isNumeric } from 'jquery';
 
 const Login = (props) => {
     const { set } = useAuth();
@@ -14,16 +16,15 @@ const Login = (props) => {
     const [error, setError] = useState('')
     const [values, setValues] = useState({ username: '', password: ''})
 
-    const validate =  (emailAdress) =>
-    {
-      let regexEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-      if (emailAdress.match(regexEmail)) {
+    const validate =  (phone) =>
+    {    
+      if (!isNaN(phone)) {
         return true; 
       } else {
         return false; 
       }
     }
-    
+
     const onSubmit = async (e) => {
         let userData = {}
         // check phone_number
@@ -31,12 +32,13 @@ const Login = (props) => {
             setError('phone number or username is required')
             return
         }
-        if(validate(values.login)){
-            userData.email = values?.login
+        if(!validate(values.login)){
+            userData.username = values?.login
         }else{
             userData.phone_number = values?.login
         }
         userData.password = values.password;
+
 
         // set user type
         let userType = values.login.toLowerCase() === '08111111111' ? 'superadmin' : 'admin'

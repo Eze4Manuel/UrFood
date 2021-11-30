@@ -24,7 +24,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted, update }) => {
     const [delWarning, setDelWarning] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [showPartner, setShowPartner] = React.useState(true);
-    const [showSupportAccess, setShowSupportAccess] = React.useState(true);
+    const [showSupportAccess, setShowSupportAccess] = React.useState(false);
     const [, setShowProfile] = React.useState(false);
 
     useEffect(() => {

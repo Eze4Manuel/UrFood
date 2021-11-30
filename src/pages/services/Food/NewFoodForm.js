@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './NewFoodForm.css';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -10,11 +10,14 @@ import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidation';
 import { InputTextarea } from 'primereact/inputtextarea';
 
+import { Toast } from 'primereact/toast';
+
 const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [city,] = useState(null);
+    const toast = useRef(null);
 
 
     const handleSubmit = () => {
@@ -28,6 +31,7 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
 
     return (
         <Dialog header="New Food" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "45vw" }}>
+            <Toast ref={toast}></Toast>
             <div>
                 <div className="user-form__button-wp">
                     {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
@@ -74,6 +78,7 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                         </div>
                     </div>
                 </div>
+
                 <div className="partner-form__button-wp">
                     <Button onClick={() => handleSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
                 </div>

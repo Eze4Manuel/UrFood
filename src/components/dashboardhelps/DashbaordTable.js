@@ -6,7 +6,8 @@ const DashbaordTable = ({
     headerRow,
     dataRow,
     data,
-    order
+    order,
+    style
 }) => {
     let dataHeader = order ? [<td>#</td>].concat(headerRow.map(d => <td>{d}</td>)) : headerRow.map(d => <td>{d}</td>)
     let tableData = data.map((value, idx) => {
@@ -19,7 +20,7 @@ const DashbaordTable = ({
     return (
         <div className={`col-${col || 6}`}>
             <div>
-                <div className="px-5 pt-3 table-responsive table-height card mt-4 overflow-scroll">
+                <div className="px-5 pt-3 table-responsive table-height card mt-4 overflow-scroll" style={style}>
                 <h6>{header}</h6>
                 <table class="table table-hover table-sm">
                     <thead>

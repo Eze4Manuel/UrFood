@@ -74,8 +74,6 @@ const Food = (props) => {
         }
     }
 
-
-
     const onSearch = async () => {
         setLoader(true)
         let reqData = await lib.get(1, searchInput, user?.token, user?.px_id)
@@ -105,7 +103,6 @@ const Food = (props) => {
     }
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
-
         setLoading(true);
         let reqData = await lib.create(values, user?.token)
         setLoading(false);

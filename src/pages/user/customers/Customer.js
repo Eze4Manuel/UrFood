@@ -72,8 +72,6 @@ const Customer = (props) => {
         })();
     }, [user?.token, page, set])
 
-      
-
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data.length, perPage); 
@@ -91,11 +89,11 @@ const Customer = (props) => {
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
             setData(fQeury(reqData.data))
         }  
-    } 
+    }
 
     const onSearch = async () => {
         setLoader(true);
-        let reqData = await lib.get(1, searchInput, user?.token, 'customers')
+        let reqData = await lib.get(1, searchInput, user?.token, 'customer')
         setLoader(false)
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
             setData(fQeury(reqData.data))

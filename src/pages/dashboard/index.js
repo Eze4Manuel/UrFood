@@ -214,6 +214,7 @@ const Dashboard = (props) => {
                 <div className="container dashboard-table__container">
                     <div className="product-summary__ctn mt-5">
                         {/* REVENUE */}
+
                         <div className="row">
                             <DashboardCard col="3" header="Gross Revenue (lifetime)" value={`0`} desc="All time revenue" />
                             <DashboardCard color='yellow' col="3" header="Vendor Revenue (lifetime)" value={`${fShortenNumber(totalPharmacyRevenue?.total) ?? 0}`} desc="All time vendor revenue" />
@@ -221,7 +222,6 @@ const Dashboard = (props) => {
                             <DashboardCard color='red' col="3" header="Total Order (lifetime)" value={`${fShortenNumber(orderCount?.total) ?? 0}`} desc="All time orders" />
                         </div>
                         <div className="row">
-                        {console.log(revenueByMonth)}
                             <DashboardCard col="3" header={revenue} value={`${fShortenNumber(revenueByMonth?.total) ?? 0}`} desc="Current Month revenue" />
                             <DashboardCard color='yellow' col="3" header={vendorRevenue} value={`${fShortenNumber(totalPharmacyRevenue?.total) ?? 0}`} desc="Current Month vendor revenue" />
                             <DashboardCard color='green' col="3" header={dispatchFeeCurrentMonth} value={`${fShortenNumber(revenueByMonth?.dispatch_fee) ?? 0}`} desc="Current Month Dispatch Fee" />
@@ -235,11 +235,11 @@ const Dashboard = (props) => {
                             <DashboardCard color='yellow' col="3" header="Dispatchers" value={`${fShortenNumber(userTypes?.dispatcher ?? 0)}`} desc="Total Delivery Personnel" />
                         </div>
                         <div className="row mb-5 pb-5">
-                            <DashbaordTable col="12" data={userData2} dataRow={['sn', 'routes', 'month', 'product', 'amount']} header="Routes" headerRow={['#', 'Routes', 'Months', 'Items', 'Amount']} />
+                            <DashbaordTable col="12" data={userData2} dataRow={['sn', 'routes', 'month', 'product', 'amount']} header="Routes" headerRow={['#', 'Routes', 'Months', 'Items', 'Amount']} style={{maxHeight: "400px", overflow: "scroll"}} />
                             <DashbaordTable dataRow={['sn', 'month', 'amount', 'dispatch_fee', 'total']} data={reveneData} header="Revenue For Last 6 months" headerRow={['#', 'Month', 'Amount', 'Dispatch Fee', 'Total']} />
-                            <DashbaordTable dataRow={['sn', 'name', 'amount', 'dispatch_fee', 'total']} data={reveneArea} header="Revenue By Vendor" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} />
+                            <DashbaordTable dataRow={['sn', 'name', 'amount', 'dispatch_fee', 'total']} data={reveneArea} header="Revenue By Vendor" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} style={{maxHeight: "400px", overflow: "scroll"}}  />
                             <DashbaordTable col="6" data={userStatus} dataRow={['sn', 'status', 'total']} header="Orders Status" headerRow={['#', 'Status', 'Total']} />
-                            <DashbaordTable col="6" data={userArea} dataRow={['sn', 'area', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'Total']} />
+                            <DashbaordTable col="6" data={userArea} dataRow={['sn', 'area', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'Total']} style={{maxHeight: "400px", overflow: "scroll"}} />
                         </div>
                     </div>
                 </div>

@@ -151,6 +151,7 @@ const Vendor = (props) => {
          setData(fQeury(d))
          await reload()
     }
+    console.log(data)
 
     return (
         <div className="main-content">
@@ -178,6 +179,7 @@ const Vendor = (props) => {
                 />
                 {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                 <VendorUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+
                 {
                     viewData.length > 0
                     ? (
@@ -194,8 +196,8 @@ const Vendor = (props) => {
                                 perPage={perPage}
                                 route="" // {config.pages.user}
                                 tableTitle="Vendor" 
-                                tableHeader={['#','ID', 'Vendor Name',  'Phone']}
-                                dataFields={['vendor_id', 'vendor_name', 'phone_number']}
+                                tableHeader={['#','ID', 'Name of vendor', 'Vendor shop',  'Phone']}
+                                dataFields={['vendor_id', 'name', 'vendor_name', 'phone_number']}
                             />
                         </div>
                     )

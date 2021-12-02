@@ -31,7 +31,7 @@ const EditFoodForm = ({ data, show, onUpdated }) => {
         let builder = formValidator.validateFoodUpdate(values, data, {}, setError)
         if (!builder) {
             return
-        }
+        } 
         // update
         setLoading(true);
         let reqData = await lib.updateFood(builder, data?._id, user?.token)

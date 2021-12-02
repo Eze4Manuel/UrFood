@@ -10,7 +10,7 @@ lib.get = async (page, search, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         if (search) {
-            uri = `/foods/admin?page=${page}&q=${search}`;
+            uri = `/foods?page=${page}&q=${search}`;
         } else {
             uri = `/foods/admin?page=${page}`;
         }

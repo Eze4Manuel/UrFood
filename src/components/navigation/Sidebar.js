@@ -9,7 +9,6 @@ import Flash from '../../components/flash/Flash';
 const Sidebar = (props) => {
     const { set } = useAuth();
     const [delWarning, setDelWarning] = React.useState(false);
-    const [error, setError] = React.useState(false);
 
     const sidebarLinks = config.sidebar.map(cfg => {
         if (cfg.divider === 'dashboard'
@@ -19,7 +18,10 @@ const Sidebar = (props) => {
         }
 
         const deleteAccount = async (name) => {
-            setDelWarning(true)
+            if (name === 'logout') {
+                setDelWarning(true)
+
+            }
         }
 
         const onLogout = (name) => {

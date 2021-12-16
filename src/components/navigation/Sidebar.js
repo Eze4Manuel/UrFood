@@ -20,7 +20,6 @@ const Sidebar = (props) => {
         const deleteAccount = async (name) => {
             if (name === 'logout') {
                 setDelWarning(true)
-
             }
         }
 

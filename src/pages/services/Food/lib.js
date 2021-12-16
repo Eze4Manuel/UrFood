@@ -19,7 +19,6 @@ lib.get = async (page, search, token) => {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
 }
- 
 
 lib.updateFood = async (values, id, token) => {
     let uri = '';

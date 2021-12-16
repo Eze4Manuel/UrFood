@@ -45,8 +45,6 @@ const Login = (props) => {
         }else{
             userData.password = values.password;
         }
-
-
         // set user type
         let userType = values.login.toLowerCase() === '08111111111' ? 'superadmin' : 'admin'
         userData.user_type = userType

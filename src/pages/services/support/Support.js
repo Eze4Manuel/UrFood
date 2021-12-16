@@ -114,7 +114,7 @@ const Support = (props) => {
                 setLoader(false)
             }
         })();
-    }, [user?.token, page, set ])
+    }, [user?.token, page, set])
 
 
     // setup table data

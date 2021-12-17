@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './NewVendorForm.css';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -6,6 +6,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { Password } from 'primereact/password';
+import { Dropdown } from 'primereact/dropdown';
 import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
@@ -15,6 +16,42 @@ const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) =>
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [selectedArea, setSelectedArea] = useState(null);
+
+
+    const areas = [
+        { name: 'Area 1', code: 'area 1' },
+        { name: 'Asokoro', code: 'asokoro' },
+        { name: 'Bamburu', code: 'bamburu' },
+        { name: 'Dawaki', code: 'dawaki' },
+        { name: 'Dustse alaji', code: 'dustse alaji' },
+        { name: 'Garki', code: 'garki' },
+        { name: 'Gwagwalada', code: 'gwagwalada' },
+        { name: 'Gwarinpa', code: 'gwarinpa' },
+        { name: 'Gudu', code: 'gudu' },
+        { name: 'Jabi', code: 'jabi' },
+        { name: 'Jikwoyi', code: 'jikwoyi' },
+        { name: 'Katampe', code: 'katampe' },
+        { name: 'Katampe extension', code: 'katampe extension' },
+        { name: 'Karshi', code: 'karshi' },
+        { name: 'Kubwa', code: 'kubwa' },
+        { name: 'Kurunduma', code: 'kurunduma' },
+        { name: 'Life camp', code: 'life camp' },
+        { name: 'Mararaba', code: 'mararaba' },
+        { name: 'Masaka', code: 'masaka' },
+        { name: 'Nyanya', code: 'nyanya' },
+        { name: 'Utako', code: 'utako' },
+        { name: 'Wuse', code: 'wuse' },
+        { name: 'Wuse 2', code: 'wuse 2' },
+        { name: 'Yoba', code: 'yoba' },
+        { name: 'Zone 2', code: 'zone 2' },
+        { name: 'Zone 4', code: 'zone 4' },
+        { name: 'Zone 5', code: 'zone 5' },
+        { name: 'Zone 6', code: 'zone 6' },
+        { name: 'Zuba', code: 'zuba' }
+    ];
+
+
 
     const footer = (
         <React.Fragment>
@@ -38,9 +75,12 @@ const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) =>
         props.onSubmit(builder, setLoading, setError, setValues, config.userData)
     }
 
+ 
+
     return (
         <Dialog header="New Vendor Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "45vw" }}>
             <div>
+
                 <div className="mb-4"><h6>Vendor Information</h6></div>
                 <div className="user-form__button-wp">
                     {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
@@ -99,7 +139,7 @@ const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) =>
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="area">Vendor Location Area*</label><br />
-                            <InputText style={{ width: '100%' }} id="area" name="area" type="text" onChange={e => setValues(d => ({ ...d, area: e.target.value }))} value={values?.area} className="p-inputtext-sm p-d-block p-mb-2" placeholder="area" />
+                            <Dropdown style={{ width: '100%', height: "30px", lineHeight: "30px" }}  value={selectedArea} id="area" name="area" options={areas} onChange={e => { setSelectedArea(e.value); setValues(d => ({ ...d, area: e.value.code })) }} optionLabel="name" placeholder="Select an Area" />
                         </div>
                     </div>
                 </div>

@@ -13,6 +13,7 @@ import { useNotifications } from '@mantine/notifications';
 import Alert from '../../../components/flash/Alert';
 import helpers from '../../../core/func/Helpers';
 import Tabs from "../../../components/tabs/Tabs";
+import { useCallback } from 'react'
 
 
 const Support = (props) => {
@@ -51,23 +52,23 @@ const Support = (props) => {
         }
     }
 
-    const fQeury = (data) => {
+    const fQeury = useCallback((data) => {
         return data?.map(d => {
             return {
                 ...d,
                 status_state: processStatus(d.status)
             }
         })
-    }
+    },[])
 
-    const PQeury = (data) => {
+    const PQeury = useCallback((data) => {
         return data?.map(d => {
             return {
                 name: d.name,
                 auth_id: d.auth_id,
             }
         })
-    }
+    }, [])
 
     // appends support user to various support listing if there exists
     const MQeury = (data) => {
@@ -114,7 +115,7 @@ const Support = (props) => {
                 setLoader(false)
             }
         })();
-    }, [user?.token, page, set])
+    }, [user?.token, page, fQeury, PQeury, set])
 
 
     // setup table data

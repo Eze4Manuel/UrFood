@@ -6,3 +6,18 @@
     display: flex;
     flex-direction: row-reverse;
 }
+
+.fix_button{
+    max-width: 200px!important;
+    overflow: hidden;
+    text-align: start;
+    white-space: nowrap
+}
+.p-button-label, .p-button-icon {
+    font-size: 12px!important;
+}
+.p-button-label{
+    text-align: start;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}

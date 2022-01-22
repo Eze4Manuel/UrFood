@@ -32,7 +32,6 @@ const Transaction = (props) => {
     const NavigationBar = props.NavigationBar;
     const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
-    const [, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
@@ -141,10 +140,10 @@ const Transaction = (props) => {
     }
     const updateDispatchFee = (
         <div className="p-grid p-fluid">
+            <h5 style={{fontSize: "14px"}}>Update Dispatch Fee</h5>
             <div className="p-col-12">
-                {console.log(dispatchFee)}
                 <div className="p-inputgroup">
-                    <InputText placeholder={`${dispatchFee}`} id='dispatchFee' onChange={(e) => setDispatchFee(e.target.value)} value={dispatchFee} disabled={editable} />
+                    <InputText placeholder={`${dispatchFee}`} onChange={(e) => setDispatchFee(e.target.value)} value={dispatchFee} disabled={editable} />
                     <Button icon="pi pi-pencil" onClick={() => setEditable(!editable)} className="p-button-primary p-button-edit" />
                     <Button icon="pi pi-check" onClick={() => updateFee()} disabled={editable} className="p-button-success p-button-update" />
                 </div>
@@ -159,7 +158,7 @@ const Transaction = (props) => {
                 <SubNavbar
                     showFilter
                     showSearch
-                    showButton={false}
+                    showField = {true}
                     filterName="transaction"
                     filterList={['name', 'location', 'phone']}
                     searchPlaceholder="Search for transaction..."
@@ -169,10 +168,11 @@ const Transaction = (props) => {
                     searchInput={searchInput}
                     onChangeInput={setSearchInput}
                     searchID="transaction"
-                    buttonTitle="Add pharmacy"
+                    buttonTitle="Update Dispatch Fee"
                     onSelectChange={setOption}
                     option={option}
-                    onAddItem={() => setOpenForm(true)}
+                    onShowFieldTitle={'Update Dispatch'}
+                    onShowField={updateDispatchFee}
                 />
                 {data?.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                     <>
@@ -187,8 +187,6 @@ const Transaction = (props) => {
                                 pages={paginate}
                                 data={viewData}
                                 perPage={perPage}
-                                rightSide = {updateDispatchFee}
-                                sideTitle = 'Update Dispatch Fee'
                                 route="" // {config.pages.user}
                                 tableTitle="Transactions"
                                 tableHeader={['#', 'ID', 'Name', 'Email', 'Payment Method', 'Amount']}

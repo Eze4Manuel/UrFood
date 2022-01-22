@@ -43,7 +43,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
         let builder = formValidator.validateCustomerUpdate(values, getFormData(data), {}, data, setError)
         if (!builder) {
             return
-        }
+        } 
         builder.user_id = data?.auth_id
         // update
         setLoading(true)

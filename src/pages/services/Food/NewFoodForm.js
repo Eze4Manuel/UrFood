@@ -9,8 +9,12 @@ import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidation';
 import { InputTextarea } from 'primereact/inputtextarea';
-
+import { FileUpload } from 'primereact/fileupload';
+import { useAuth } from '../../../core/hooks/useAuth';
 import { Toast } from 'primereact/toast';
+import lib from './lib';
+import helpers from '../../../core/func/Helpers';
+import { useNotifications } from '@mantine/notifications';
 
 const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
@@ -18,7 +22,8 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [error, setError] = React.useState(false);
     const [city,] = useState(null);
     const toast = useRef(null);
-
+    const { set, user } = useAuth();
+    const notify = useNotifications();
 
     const handleSubmit = () => {
         let builder = formValidator.validateNewFood(values, {}, setError)
@@ -28,7 +33,31 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
         // submit
         props.onSubmit(builder, setLoading, setError, setValues, config.userData)
     }
+    const onBasicUpload = async (e) => {
+        console.log(e);
+        let payload = {
+            file_name: e.files[0].name,
+            file_type: e.files[0].type
+        }
+        let reqData = await lib.getPreSignedUrl(payload, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            console.log(reqData);
+            
+            let uploadData = await lib.uploadImage(e.files[0],  user?.token);
+            if (uploadData.status === 'error') {
+                helpers.sessionHasExpired(set, reqData?.msg, setError)
+            }else{
+                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Image Uploaded' })
+            }
+            console.log(uploadData);
 
+        }
+    }
     return (
         <Dialog header="New Food" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "45vw" }}>
             <Toast ref={toast}></Toast>
@@ -77,8 +106,14 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                             <label htmlFor="listing_status">False</label>
                         </div>
                     </div>
+                    <div className="col-lg-6">
+                        <h5 style={{ "fontSize": "14px" }}>Upload Image</h5>
+                        <FileUpload className='fix_button' mode="basic" name="food_image" accept="image/*" customUpload={true} maxFileSize={1000000} uploadHandler={ e => onBasicUpload(e)} />
+                    </div>
                 </div>
-
+                <div className="row">
+                    
+                </div>
                 <div className="partner-form__button-wp">
                     <Button onClick={() => handleSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
                 </div>

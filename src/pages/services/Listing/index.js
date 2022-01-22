@@ -29,6 +29,7 @@ const Listing = (props) => {
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
+    const [listingData, setListingData] = useState([]);
 
     const fQeury = (data) => {
         return data.map(d => {
@@ -44,6 +45,27 @@ const Listing = (props) => {
             }
         })
     }
+
+    const processor = (arr) => {
+        const temp = [];
+        const sec_temp = [];
+        arr?.forEach((elem, ind) => {
+            let indexArray = temp.indexOf(elem.vendor);
+             if(indexArray === -1){
+                temp.push(elem.vendor);
+                sec_temp.push(1);
+             }else{
+                sec_temp[indexArray] = sec_temp[indexArray] + 1;
+             }
+        })
+        return temp.map((e,ind) => (
+            {
+                vendor: e,
+                quantity: sec_temp[ind]
+            }
+        ))
+    }
+
     // data 
     useEffect(() => {
         (async () => {
@@ -55,6 +77,7 @@ const Listing = (props) => {
             if (reqData.status === 'ok') {
                 setData(fQeury(reqData.data));
                 setProcessedData(fQeury(reqData.data));
+                setListingData(processor(reqData.data))
             }
             setLoader(false);
         })()
@@ -62,10 +85,10 @@ const Listing = (props) => {
 
     // setup table data
     const perPage = getPageCount(10);
-    const paginate = getPages(data?.length, perPage);
+    const paginate = getPages(listingData?.length, perPage);
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
-    let viewData = data?.slice(start, stop);
+    let viewData = listingData?.slice(start, stop);
 
     const reload = async () => {
         setLoader(true)
@@ -174,8 +197,8 @@ const Listing = (props) => {
                                 perPage={perPage}
                                 route=""
                                 tableTitle="Listing"
-                                tableHeader={['#', 'ID', 'Name', 'Price', 'Category']}
-                                dataFields={['_id', 'name', 'price', 'category']}
+                                tableHeader={['#', 'Vendor ID' ,'Quantity']}
+                                dataFields={['vendor', 'quantity']}
                             />
                         </>
                     }

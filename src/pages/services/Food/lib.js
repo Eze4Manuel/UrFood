@@ -1,5 +1,6 @@
 import request from '../../../assets/utils/http-request';
 import helpers from '../../../core/func/Helpers';
+const FormData = require('form-data');
 
 const lib = {}
 
@@ -44,6 +45,31 @@ lib.delete = async (id, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         return await (await request.delete(`/foods/admin/${id}`, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
+
+lib.getPreSignedUrl = async (payload, token) => {
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        return await (await request.post(`/files/generate-presigned-url`, payload, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
+lib.uploadImage = async ( imagePayload, token) => {
+    try {
+        var formData = new FormData();
+        formData.append("image", imagePayload.objectURL);
+        return await (await request.post(`/files/image`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': token
+            }
+        } )).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }

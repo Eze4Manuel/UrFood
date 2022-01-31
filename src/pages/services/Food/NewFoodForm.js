@@ -15,6 +15,7 @@ import { Toast } from 'primereact/toast';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
 import { useNotifications } from '@mantine/notifications';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
@@ -24,38 +25,44 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const toast = useRef(null);
     const { set, user } = useAuth();
     const notify = useNotifications();
+    const [loaded, setLoaded] = React.useState(false);
+    const [uploaded, setUploaded] = React.useState('');
 
     const handleSubmit = () => {
+        console.log(values);
+
         let builder = formValidator.validateNewFood(values, {}, setError)
         if (!builder) {
             return
         }
+        console.log(builder);
         // submit
         props.onSubmit(builder, setLoading, setError, setValues, config.userData)
     }
+
     const onBasicUpload = async (e) => {
-        console.log(e);
+        setLoaded(true)
         let payload = {
             file_name: e.files[0].name,
             file_type: e.files[0].type
         }
-        let reqData = await lib.getPreSignedUrl(payload, user?.token)
-        setLoading(false)
+        let reqData = await lib.getPreSignedUrl(payload, user?.token);
         // error
         if (reqData.status === 'error') {
-            helpers.sessionHasExpired(set, reqData?.msg, setError)
+            helpers.sessionHasExpired(set, reqData?.msg, setError);
         }
         if (reqData.status === 'ok') {
             console.log(reqData);
-            
-            let uploadData = await lib.uploadImage(e.files[0],  user?.token);
+            let uploadData = await lib.uploadImage(reqData.data.signed_url, e.files[0]);
             if (uploadData.status === 'error') {
                 helpers.sessionHasExpired(set, reqData?.msg, setError)
-            }else{
-                helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Image Uploaded' })
+            } if (uploadData.statusText === 'OK') {
+                console.log(uploadData);
+                let public_url = reqData.data.public_url;
+                setValues(d => ({ ...d, avatar: public_url }));
+                setUploaded('Image Uploaded');
+                setLoaded(false);
             }
-            console.log(uploadData);
-
         }
     }
     return (
@@ -108,14 +115,19 @@ const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                     </div>
                     <div className="col-lg-6">
                         <h5 style={{ "fontSize": "14px" }}>Upload Image</h5>
-                        <FileUpload className='fix_button' mode="basic" name="food_image" accept="image/*" customUpload={true} maxFileSize={1000000} uploadHandler={ e => onBasicUpload(e)} />
+                        {/* <input onChange={(e) => onBasicUpload(e)} type='file'  name="food_image" accept="image/*"  /> */}
+                        <div style={{display: "flex", justifyContent: 'start'}}>
+                            <FileUpload className='fix_button' url="./upload" mode="basic" name="food_image" accept="image/*" customUpload={true} maxFileSize={1000000} uploadHandler={onBasicUpload} />
+                            {loaded ? <ProgressSpinner style={{ width: '30px', height: '20px', margin: "10px" }} strokeWidth="2" fill="var(--surface-ground)" animationDuration=".5s" /> : null}
+                        </div>
+                        <p style={{fontSize: '12px'}}>{uploaded}</p>
                     </div>
                 </div>
                 <div className="row">
-                    
+
                 </div>
                 <div className="partner-form__button-wp">
-                    <Button onClick={() => handleSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
+                    <Button disabled= {loaded ? true: false} onClick={() => handleSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
                 </div>
             </div>
         </Dialog>

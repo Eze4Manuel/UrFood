@@ -82,7 +82,7 @@ formValidator.validateNewFood = (form, builder, setError) => {
    builder.ingredients = form.ingredients
    
    builder.description = form.description
-   builder.avatar = form.avatar
+   builder.avatar = form.avatar;
   
    // return payload
    return builder

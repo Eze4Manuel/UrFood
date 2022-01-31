@@ -14,23 +14,20 @@ import { useAuth } from '../../../core/hooks/useAuth';
 import { Toast } from 'primereact/toast';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
-import { useNotifications } from '@mantine/notifications';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 const NewFoodForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState(false);
     const [city,] = useState(null);
     const toast = useRef(null);
+    const [error, setError] = React.useState(false);
     const { set, user } = useAuth();
-    const notify = useNotifications();
     const [loaded, setLoaded] = React.useState(false);
     const [uploaded, setUploaded] = React.useState('');
 
     const handleSubmit = () => {
         console.log(values);
-
         let builder = formValidator.validateNewFood(values, {}, setError)
         if (!builder) {
             return

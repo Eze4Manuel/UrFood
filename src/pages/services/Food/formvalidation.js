@@ -8,7 +8,7 @@ formValidator.validateFoodUpdate = (form, values, builder, setError) => {
    setError("");
 
    //validate the name
-   if (form.name !== values.name) {
+   if (form?.name !== values.name) {
       if (!form.name) {
          return setError("Name is required")
       }
@@ -16,7 +16,7 @@ formValidator.validateFoodUpdate = (form, values, builder, setError) => {
    }
 
     // validate the ingredients
-    if (form.ingredients !== values.ingredients) {
+    if (form?.ingredients !== values.ingredients) {
       if (!form.ingredients) {
          return setError("Ingredients is required")
       }
@@ -24,14 +24,14 @@ formValidator.validateFoodUpdate = (form, values, builder, setError) => {
    }
 
    // validate the description
-   if (form.description !== values.description) {
+   if (form?.description !== values.description) {
       if (!form.description) {
          return setError("description is required")
       }
       builder.description = form.description
    }
    // validate the description
-   if (form.listing_status !== values.listing_status) {
+   if (form?.listing_status !== values.listing_status) {
       if (!form.listing_status) {
          return setError("listing_status is required")
       }

@@ -75,7 +75,7 @@ const FoodUserData = ({ data, show, onHide, onDeleted }) => {
                         <div className="partner-form__button-wp">
                             {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
                         </div>
-                        <FoodUserDetail data={values} />
+                        <FoodUserDetail data={values} onHide={onHide} />
                     </div>
                     <div className="col-5">
                         

@@ -49,7 +49,7 @@ const index = (props) => {
                 ? (
                     props.onShowField
                 )
-                : <div style={{width: '30%'}} />
+                : null
             }
         </div>
     )

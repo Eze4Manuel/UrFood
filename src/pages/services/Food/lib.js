@@ -1,7 +1,6 @@
 import request from '../../../assets/utils/http-request';
 import helpers from '../../../core/func/Helpers';
-const FormData = require('form-data');
-
+import axios from 'axios';
 const lib = {}
 
 
@@ -60,17 +59,32 @@ lib.getPreSignedUrl = async (payload, token) => {
     }
 }
 
-lib.uploadImage = async ( imagePayload, token) => {
+lib.uploadImage = async ( signed_url, file) => {
     try {
-        var formData = new FormData();
-        formData.append("image", imagePayload.objectURL);
-        return await (await request.post(`/files/image`, formData, {
+        return await (await axios.put(signed_url, file, {
             headers: {
               'Content-Type': 'multipart/form-data',
-              'Authorization': token
             }
-        } )).data 
+        } ))
     } catch (e) {
+        console.log(e);
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
+lib.uploadSingle = async ( payload, token) => {
+    var formData = new FormData(); 
+    formData.append('image', payload);
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        return await (await axios.post('https://urfood.appbuildtest.com/v1/files/image', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': cfg
+            }
+        } ))
+    } catch (e) {
+        console.log(e);
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
 }

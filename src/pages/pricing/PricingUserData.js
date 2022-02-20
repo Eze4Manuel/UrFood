@@ -24,7 +24,7 @@ const PricingUserData = ({ data, show, onHide, onDeleted, onUpdate }) => {
     const [error, setError] = React.useState(false);
 
     useEffect(() => {
-        setValues(data);
+        setValues(data !== null ? data[0]:[]);
         setDelWarning(false)
     }, [data])
 

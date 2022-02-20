@@ -31,7 +31,6 @@ const Order = (props) => {
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
 
-
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data?.length, perPage);
@@ -187,8 +186,6 @@ const Order = (props) => {
                             />
                         </>
                     }
-
-
                 </div>
             </main>
         </div>

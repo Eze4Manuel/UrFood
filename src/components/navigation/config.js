@@ -24,7 +24,9 @@ const config = {
                 {name: 'dispatch', icon: 'las la-store-alt', link: conf.pages.order},
                 {name: 'listing', icon: 'las la-utensils', link: conf.pages.listing },
                 {name: 'food', icon: 'las la-utensils', link: conf.pages.food},
-                {name: 'support', icon: 'las la-utensils', link: conf.pages.supportstaff}
+                {name: 'support', icon: 'las la-utensils', link: conf.pages.supportstaff},
+                {name: 'location', icon: 'las la-map', link: conf.pages.location},
+                {name: 'pricing', icon: 'las la-money-bill', link: conf.pages.pricing},
             ]
         },
         {

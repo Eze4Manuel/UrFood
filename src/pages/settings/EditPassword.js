@@ -61,8 +61,17 @@ const EditPassword = ({ data, show, onHide }) => {
         }
         // submit the password
         setLoading(true);
-        let reqData = await lib.updateSettingsPassword(user?.auth_id, values, user?.token)
+
+        let payload = {
+            auth_id: user?.auth_id,
+            password: values.new_password
+        }
+         
+
+        let reqData = await lib.updateSettingsPassword(user?.auth_id, payload, user?.token)
         setLoading(false)
+
+        
         // error
         if (reqData.status === 'error') {
             helpers.sessionHasExpired(set, reqData?.msg, setError)
@@ -98,13 +107,7 @@ const EditPassword = ({ data, show, onHide }) => {
                 {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
             </div>
             {error ? <ErrorMessage message={error} /> : null}
-            <div className="row mt-5">
-                <div className="col-lg-12">
-                    <div className="p-field mb-1">
-                        <label htmlFor="new_password">Old Password</label><br />
-                        <Password footer={footer} minLength={6} maxLength={24} id="old_password" name="old_password" type="text" onChange={e => setValues(d => ({ ...d, old_password: e.target.value }))} value={values?.old_password} className="p-inputtext-sm" placeholder="********" toggleMask />
-                    </div>
-                </div>
+            <div className="row mt-5">                
                 <div className="col-lg-12">
                     <div className="p-field mb-1">
                         <label htmlFor="new_password">New Password</label><br />

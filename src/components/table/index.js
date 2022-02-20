@@ -42,19 +42,19 @@ const Table = (props = {
                     props.dataFields.map((key) => {
                         let dk = key;
                         let value
-                        // if (key === 'username') {
-                        //     dk = 'email'
-                        // }
+                        if (key === 'username') {
+                            dk = 'email'
+                        }
                         value = _tr[dk]
                         // nested object
-                        // let nestedKey = key.split('.');
-                        // if (nestedKey?.length > 1 && nestedKey[1] !== 'length') {
-                        //     value = _tr[nestedKey[0]][nestedKey[1]]
-                        // }
-                        // // array length
-                        // if (nestedKey?.length > 1 && nestedKey[1] === 'length') {
-                        //     value = _tr[nestedKey[0]]?.length
-                        // }
+                        let nestedKey = key.split('.');
+                        if (nestedKey?.length > 1 && nestedKey[1] !== 'length') {
+                            value = _tr[nestedKey[0]][nestedKey[1]]
+                        }
+                        // array length
+                        if (nestedKey?.length > 1 && nestedKey[1] === 'length') {
+                            value = _tr[nestedKey[0]]?.length
+                        }
                         return (<td>{value}</td>)
 
                         // return (<td>{_tr[dk]}</td> )
@@ -69,11 +69,11 @@ const Table = (props = {
             <span className='table table-header-container'>
                 <h1>{props.tableTitle}</h1>
                 <div>
-                    <h6> {props.sideTitle}</h6>                    
+                    <h6> {props.sideTitle}</h6>
                     <span>{props.rightSide}</span>
                 </div>
             </span>
-            <table className="table table-hover table-sm"  ref={props.ref}>
+            <table className="table table-hover table-sm" ref={props.ref}>
                 <thead>
                     <tr className="app-table__header">{tableHeader}</tr>
                 </thead>

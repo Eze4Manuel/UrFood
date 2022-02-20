@@ -1,0 +1,49 @@
+.user-info__detail {
+    font-size: 13px;
+    line-height: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-info__btn-action-wp {
+    z-index: 99;
+    position: fixed;
+    width: 50%;
+
+}
+
+.user-info__btn-action {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 1px;
+    background-color: #fff;
+    border-bottom: 1px solid grey;
+}
+
+.btn__edit-ctn{
+    margin: 8px;
+    font-size: 11px;
+    font-weight: 400;
+    margin-bottom: 2px;
+    min-width: 90px;
+}
+
+.btn-action__green:hover {
+    border: 1px solid green;
+    cursor: pointer;
+    color: green;
+}
+
+.btn-action__grey:hover {
+    border: 1px solid grey;
+    color: gray;
+    cursor: pointer;
+}
+
+.btn-action__red:hover {
+    border: 1px solid red;
+    cursor: pointer;
+    color: red;
+}

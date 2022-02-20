@@ -5,10 +5,11 @@ const lib = {}
  
 
 lib.updateSettingsPassword = async (id, data, token) => {
+    console.log(data);
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         
-        return await (await request.put(`/auth/update-user-password`, data, cfg)).data 
+        return await (await request.post(`/auth/admin-password-reset`, data, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }

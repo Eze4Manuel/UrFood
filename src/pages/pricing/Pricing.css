@@ -1,0 +1,12 @@
+.app-table__conatiner {
+    position: absolute;
+    background: black;
+    overflow-x: hidden !important;
+}
+
+.pricing-table__container {
+    position: absolute;
+    left: 255px;
+    width: 80%;
+    overflow: hidden;
+}

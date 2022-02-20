@@ -22,6 +22,8 @@ const config = {
         support: '/supports',
         transaction: '/transaction',
         supportstaff: '/supportstaff',
+        location: '/location',
+        pricing: '/pricing',
         logout: '/logout',
     },
     key: {

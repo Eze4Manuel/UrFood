@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import './NewVendorForm.css';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -9,6 +9,8 @@ import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidation';
 import { useAuth } from '../../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
+import { Dropdown } from 'primereact/dropdown';
+import { Skeleton } from 'primereact/skeleton';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
 
@@ -18,6 +20,10 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [selectedArea, setSelectedArea] = useState(null);
+    const [selectedItem2, setSelectedItem2] = useState(null);
+    const [lazyItems, setLazyItems] = useState([]);
+    const [lazyLoading, setLazyLoading] = useState(false);
 
     const getFormData = (data) => {
         let vendor = data?.vendor_data || {}
@@ -36,6 +42,34 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     React.useEffect(() => {
         setValues(getFormData(data))
     }, [data])
+
+    let loadLazyTimeout = useRef(null);
+
+    const onLazyItemChange = (e) => {
+        setSelectedItem2(e.value);
+        setValues({ ...values,  area: e.value});
+    }
+
+    const onLazyLoad = (event) => {
+        setLazyLoading(true);
+
+        if (loadLazyTimeout) {
+            clearTimeout(loadLazyTimeout);
+        }
+        //imitate delay of a backend call
+        loadLazyTimeout =  setTimeout(async () => {
+            const _lazyItems = [...lazyItems];
+            let reqData = await lib.getAreas(user?.token)
+            if (reqData.status === "ok") {
+                console.log(reqData);
+                reqData.data.forEach((element, ind) => {
+                    _lazyItems[ind] = { label: `${element.display_name}`, value: `${element.display_name}` } 
+                });
+            }
+            setLazyItems(_lazyItems);
+            setLazyLoading(false);
+        }, Math.random() * 1000 + 250);
+    }
 
     const handleSubmit = async () => {
         let builder = formValidator.validateVendorUpdate(values, getFormData(data), {}, data, setError)
@@ -114,7 +148,15 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                 <div className="col-lg-12">
                     <div className="p-field mb-2">
                         <label htmlFor="area">Area</label><br />
-                        <InputText style={{ width: '100%' }} id="area" name="area" type="text" onChange={e => setValues(d => ({ ...d, area: e.target.value }))} value={values?.area} className="p-inputtext-sm p-d-block p-mb-2" placeholder="area" />
+                         <Dropdown  id="pharmacy_area" name="pharmacy_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                                lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
+                                    return (
+                                        <div className="flex align-items-center p-2" style={{ height: '38px' }}>
+                                            <Skeleton width={options.even ? '60%' : '50%'} height="1rem" />
+                                        </div>
+                                    )
+                                }
+                            }} placeholder="Select Area" />
                     </div>
                 </div>
             </div>

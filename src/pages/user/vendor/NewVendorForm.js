@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './NewVendorForm.css';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -11,13 +11,47 @@ import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidation';
+import { Skeleton } from 'primereact/skeleton';
+import { useAuth } from '../../../core/hooks/useAuth';
+import lib from './lib';
 
 const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [selectedArea, setSelectedArea] = useState(null);
+    const [selectedItem2, setSelectedItem2] = useState(null);
+    const [lazyItems, setLazyItems] = useState([]);
+    const [lazyLoading, setLazyLoading] = useState(false);
+    const { set, user } = useAuth();
 
+    let loadLazyTimeout = useRef(null);
+
+    const onLazyItemChange = (e) => {
+        setSelectedItem2(e.value);
+        setValues({ ...values,  area: e.value});
+    }
+
+    const onLazyLoad = (event) => {
+        setLazyLoading(true);
+
+        if (loadLazyTimeout) {
+            clearTimeout(loadLazyTimeout);
+        }
+        //imitate delay of a backend call
+        loadLazyTimeout =  setTimeout(async () => {
+            const _lazyItems = [...lazyItems];
+            let reqData = await lib.getAreas(user?.token)
+            if (reqData.status === "ok") {
+                console.log(reqData);
+                reqData.data.forEach((element, ind) => {
+                    _lazyItems[ind] = { label: `${element.display_name}`, value: `${element.display_name}` } 
+                });
+            }
+            setLazyItems(_lazyItems);
+            setLazyLoading(false);
+        }, Math.random() * 1000 + 250);
+    }
 
     const areas = [
         { name: 'Area 1', code: 'area 1' },
@@ -139,7 +173,15 @@ const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) =>
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="area">Vendor Location Area*</label><br />
-                            <Dropdown style={{ width: '100%', height: "30px", lineHeight: "30px" }}  value={selectedArea} id="area" name="area" options={areas} onChange={e => { setSelectedArea(e.value); setValues(d => ({ ...d, area: e.value.code })) }} optionLabel="name" placeholder="Select an Area" />
+                            <Dropdown  id="pharmacy_area" name="pharmacy_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                                lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
+                                    return (
+                                        <div className="flex align-items-center p-2" style={{ height: '38px' }}>
+                                            <Skeleton width={options.even ? '60%' : '50%'} height="1rem" />
+                                        </div>
+                                    )
+                                }
+                            }} placeholder="Select Area" />
                         </div>
                     </div>
                 </div>

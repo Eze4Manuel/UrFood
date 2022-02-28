@@ -111,20 +111,7 @@ const EditPricingForm = ({ data, show, onHide, onUpdate }) => {
                     </div>
                 </div>
             </div>
-            {/* <div className="row">
-                <div className="col-lg-6">
-                    <div className="p-field mb-2">
-                        <label htmlFor="pickup">Pickup *</label><br />
-                        <Dropdown required style={{ width: '100%', height: "40px", lineHeight: "40px" }} value={pickup} options={locationData} onChange={ onPickChange} optionLabel="name" placeholder="pickup" />
-                    </div>
-                </div>
-                <div className="col-sm-6">
-                    <div className="p-field mb-2">
-                        <label htmlFor="destination">Destination *</label><br />
-                        <Dropdown required style={{ width: '100%', height: "40px", lineHeight: "40px" }} value={dropoff} options={locationData} onChange={ onDropoffChange} optionLabel="name" placeholder="Destination" />
-                    </div>
-                </div>
-            </div> */}
+            
             <div className="user-form__button-wp">
                 <Button onClick={onSubmit} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Update" />
             </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './NewCustomerForm.css';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -11,6 +11,8 @@ import { useAuth } from '../../../core/hooks/useAuth';
 import { useNotifications } from '@mantine/notifications';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
+import { Dropdown } from 'primereact/dropdown';
+import { Skeleton } from 'primereact/skeleton';
 
 const EditPharmacy = ({ data, show, onUpdated }) => {
     const { set, user } = useAuth();
@@ -18,7 +20,11 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [lazyItems, setLazyItems] = useState([]);
+    const [lazyLoading, setLazyLoading] = useState(false);
+    const [selectedItem2, setSelectedItem2] = useState(null);
 
+    let loadLazyTimeout = useRef(null);
     const getFormData = (data) => {
         let customers = data?.customers_data || {}
         return {
@@ -38,6 +44,32 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     React.useEffect(() => {
         setValues(getFormData(data))
     }, [data])
+
+    const onLazyItemChange = (e) => {
+        setSelectedItem2(e.value);
+        setValues({ ...values, area: e.value });
+    }
+
+    const onLazyLoad = (event) => {
+        setLazyLoading(true);
+
+        if (loadLazyTimeout) {
+            clearTimeout(loadLazyTimeout);
+        }
+        //imitate delay of a backend call
+        loadLazyTimeout = setTimeout(async () => {
+            const _lazyItems = [...lazyItems];
+            let reqData = await lib.getAreas(user?.token)
+            setLoading(false)
+            if (reqData.status === "ok") {
+                reqData.data.forEach((element, ind) => {
+                    _lazyItems[ind] = { label: `${element.name}`, value: `${element.name}` }
+                });
+            }
+            setLazyItems(_lazyItems);
+            setLazyLoading(false);
+        }, Math.random() * 1000 + 250);
+    }
 
     const handleSubmit = async () => {
         let builder = formValidator.validateCustomerUpdate(values, getFormData(data), {}, data, setError)
@@ -110,7 +142,15 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                 <div className="col-lg-12">
                     <div className="p-field mb-2">
                         <label htmlFor="area">Area</label><br />
-                        <InputText style={{ width: '100%' }} id="area" name="area" type="text" onChange={e => setValues(d => ({ ...d, area: e.target.value }))} value={values?.area} className="p-inputtext-sm p-d-block p-mb-2" placeholder="area" />
+                        <Dropdown id="area" name="area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                            lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
+                                return (
+                                    <div className="flex align-items-center p-2" style={{ height: '38px' }}>
+                                        <Skeleton width={options.even ? '60%' : '50%'} height="1rem" />
+                                    </div>
+                                )
+                            }
+                        }} placeholder={values?.area} />
                     </div>
                 </div>
             </div>
@@ -118,7 +158,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                 <div className="col-sm-12">
                     <div className="p-field mb-2">
                         <label htmlFor="address">Address</label><br />
-                        <InputTextarea style={{ width: '100%', height: '80px' }} id="address" name="address" onChange={e => setValues(d => ({ ...d, address: e.target.value }))} value={values?.address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="address" />
+                        <InputTextarea style={{ width: '100%', height: '80px' }} id="address" name="address" onChange={e => setValues(d => ({ ...d, address: e.target.value }))} value={values?.address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder={values?.address} />
                     </div>
                 </div>
             </div>

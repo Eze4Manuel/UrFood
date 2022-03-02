@@ -102,6 +102,25 @@ formValidator.validateDataUpdate = (values, data, builder, setError) => {
       builder.username = values.username
    }
 
+   // check home address
+   if (values.area !== data.area) {
+      if (values.area) {
+          if (!/^[\w\s\-',]+$/i.test(values.area)) {
+              return setError("No special character allowed for home address")
+          }
+          builder.area = values.area
+      }
+  }
+   // check address
+   if (values.address !== data.address) {
+      if (values.address) {
+         if (!/^[\w\s\-',]+$/i.test(values.address)) {
+            return setError("No special character allowed for home address")
+         }
+         builder.address = values.address
+      }
+   }
+
    if (Object.keys(builder).length === 0) {
       return setError("No changes to update")
    }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import './NewDispatcherForm.css';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -9,12 +9,49 @@ import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidator';
+import { Dropdown } from 'primereact/dropdown';
+import { Skeleton } from 'primereact/skeleton';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { useAuth } from '../../../core/hooks/useAuth';
+import lib from './lib';
+
 
 const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [lazyItems, setLazyItems] = useState([]);
+    const [lazyLoading, setLazyLoading] = useState(false);
+    const { set, user } = useAuth();
+    const [selectedItem2, setSelectedItem2] = useState(null);
+    let loadLazyTimeout = useRef(null);
 
+
+    const onLazyItemChange = (e) => {
+        setSelectedItem2(e.value);
+        setValues({ ...values, area: e.value });
+    }
+
+    const onLazyLoad = (event) => {
+        setLazyLoading(true);
+
+        if (loadLazyTimeout) {
+            clearTimeout(loadLazyTimeout);
+        }
+        //imitate delay of a backend call
+        loadLazyTimeout = setTimeout(async () => {
+            const _lazyItems = [...lazyItems];
+            let reqData = await lib.getAreas(user?.token)
+            setLoading(false)
+            if (reqData.status === "ok") {
+                reqData.data.forEach((element, ind) => {
+                    _lazyItems[ind] = { label: `${element.name}`, value: `${element.name}` }
+                });
+            }
+            setLazyItems(_lazyItems);
+            setLazyLoading(false);
+        }, Math.random() * 1000 + 250);
+    }
     const footer = (
         <React.Fragment>
             <Divider />
@@ -34,13 +71,12 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
         if (!builder) {
             return
         }
-        
         // submit
         props.onSubmit(builder, setLoading, setError, setValues, config.userData)
     }
 
     return (
-        <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "40vw" }}>
+        <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "50vw" }}>
             <div>
                 <div className="user-form__button-wp">
                     {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
@@ -97,9 +133,31 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                             <InputText style={{ width: '100%' }} id="phone_number" name="phone_number" onChange={e => setValues(d => ({ ...d, phone_number: e.target.value }))} value={values.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="080*********" />
                         </div>
                     </div>
-                    
                 </div>
-
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="p-field mb-2">
+                            <label htmlFor="home_area">Home Area</label><br />
+                            <Dropdown id="home_area" name="home_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                                lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
+                                    return (
+                                        <div className="flex align-items-center p-2" style={{ height: '38px' }}>
+                                            <Skeleton width={options.even ? '60%' : '50%'} height="1rem" />
+                                        </div>
+                                    )
+                                }
+                            }} placeholder="Select Home Area" />
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="p-field mb-1">
+                            <label htmlFor="home_address">Home Address</label><br />
+                            <InputTextarea style={{ width: '100%', height: '100px' }} id="home_address" name="home_address" onChange={e => setValues(d => ({ ...d, address: e.target.value }))} value={values?.home_address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="Home address" />
+                        </div>
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-1">

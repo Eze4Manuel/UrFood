@@ -14,13 +14,12 @@ import { Skeleton } from 'primereact/skeleton';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
 
-const EditPharmacy = ({ data, show, onUpdated }) => {
+const EditVendor = ({ data, show, onUpdated }) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
-    const [selectedArea, setSelectedArea] = useState(null);
     const [selectedItem2, setSelectedItem2] = useState(null);
     const [lazyItems, setLazyItems] = useState([]);
     const [lazyLoading, setLazyLoading] = useState(false);
@@ -28,14 +27,14 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     const getFormData = (data) => {
         let vendor = data?.vendor_data || {}
         return {
-            phone_number: data?.phone_number || '',
-            email: data?.email || '',
+            phone_number: vendor?.phone_number || '',
+            email: vendor?.email || '',
             vendor_name: vendor?.name || '',
             registration_id: vendor?.registration_id || '',
-            auth_id: data?.auth_id || '',
-            area: data?.area || '',
-            city: data?.city || '',
-            address: data?.address || '',
+            auth_id: vendor?.auth_id || '',
+            area: vendor?.area || '',
+            city: vendor?.city || '',
+            address: vendor?.address || '',
         }
     }
 
@@ -90,9 +89,8 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
             console.log(reqData.data);
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'update successful' })
             setValues({ ...data, ...reqData.data, vendor_data: {...data.vendor_data, name: reqData.data.name, registration_id: reqData.data.registration_id } })
-            onUpdated({ ...data, ...reqData.data,  vendor_data: {...data.vendor_data, name: reqData.data.name, registration_id: reqData.data.registration_id } })
+            onUpdated({ ...data, ...reqData.data,  vendor_data: {...data.vendor_data, name: reqData.data.name, registration_id: reqData.data.registration_id, area: reqData.data.area } })
         }
-        console.log(reqData.data);
     }
 
 
@@ -148,7 +146,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                 <div className="col-lg-12">
                     <div className="p-field mb-2">
                         <label htmlFor="area">Area</label><br />
-                         <Dropdown  id="pharmacy_area" name="pharmacy_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                         <Dropdown  id="vendor_area" name="vendor_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
                                 lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
                                     return (
                                         <div className="flex align-items-center p-2" style={{ height: '38px' }}>
@@ -175,4 +173,4 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     ) : null
 }
 
-export default EditPharmacy;
+export default EditVendor;

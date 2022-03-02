@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import './NewCustomerForm.css';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -10,11 +10,47 @@ import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import formValidator from './formvalidation';
+import { Dropdown } from 'primereact/dropdown';
+import { Skeleton } from 'primereact/skeleton';
+import { useAuth } from '../../../core/hooks/useAuth';
+import lib from './lib';
+
 
 const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [lazyItems, setLazyItems] = useState([]);
+    const [lazyLoading, setLazyLoading] = useState(false);
+    const { set, user } = useAuth();
+    const [selectedItem2, setSelectedItem2] = useState(null);
+
+    let loadLazyTimeout = useRef(null);
+    const onLazyItemChange = (e) => {
+        setSelectedItem2(e.value);
+        setValues({ ...values, area: e.value });
+    }
+
+    const onLazyLoad = (event) => {
+        setLazyLoading(true);
+
+        if (loadLazyTimeout) {
+            clearTimeout(loadLazyTimeout);
+        }
+        //imitate delay of a backend call
+        loadLazyTimeout = setTimeout(async () => {
+            const _lazyItems = [...lazyItems];
+            let reqData = await lib.getAreas(user?.token)
+            setLoading(false)
+            if (reqData.status === "ok") {
+                reqData.data.forEach((element, ind) => {
+                    _lazyItems[ind] = { label: `${element.name}`, value: `${element.name}` }
+                });
+            }
+            setLazyItems(_lazyItems);
+            setLazyLoading(false);
+        }, Math.random() * 1000 + 250);
+    }
 
     const footer = (
         <React.Fragment>
@@ -74,7 +110,7 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false }) 
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
@@ -86,7 +122,16 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false }) 
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="area">Customer Area*</label><br />
-                            <InputText style={{ width: '100%' }} id="area" name="area" type="text" onChange={e => setValues(d => ({ ...d, area: e.target.value }))} value={values?.area} className="p-inputtext-sm p-d-block p-mb-2" placeholder="area" />
+
+                            <Dropdown id="area" name="area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                                lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
+                                    return (
+                                        <div className="flex align-items-center p-2" style={{ height: '38px' }}>
+                                            <Skeleton width={options.even ? '60%' : '50%'} height="1rem" />
+                                        </div>
+                                    )
+                                }
+                            }} placeholder="Select Area" />
                         </div>
                     </div>
                 </div>
@@ -96,6 +141,7 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false }) 
                         <div className="p-field mb-2">
                             <label htmlFor="address">Customer Address*</label><br />
                             <InputTextarea style={{ width: '100%', height: '80px' }} id="address" name="address" onChange={e => setValues(d => ({ ...d, address: e.target.value }))} value={values?.address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="address" />
+                        
                         </div>
                     </div>
 

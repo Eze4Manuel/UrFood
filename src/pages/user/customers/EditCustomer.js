@@ -37,7 +37,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
             auth_id: data?.auth_id || '',
             area: data?.area || '',
             city: data?.city || '',
-            address: data?.address || '',
+            address: data?.address || ''
         }
     }
 

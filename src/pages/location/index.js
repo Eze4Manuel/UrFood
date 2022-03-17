@@ -35,6 +35,12 @@ const Location = (props) => {
     useEffect(() => {
         (async () => {
             setLoader(true)
+            await fetchData();
+            setLoader(false)
+        })()
+    }, [user?.token, page, set])
+
+    const fetchData =  async () => {
             let reqData = await lib.get(page, null, user?.token)
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
@@ -44,10 +50,8 @@ const Location = (props) => {
                     setNoDataAlert(true)
                     :
                     setData(reqData.data)
-            }
-            setLoader(false)
-        })()
-    }, [user?.token, page, set])
+            }        
+    }
 
     // setup table data
     const perPage = getPageCount(10);
@@ -97,6 +101,10 @@ const Location = (props) => {
     const fetchMore = (page, key, set) => {
         onSetPage(page, key, set)
     }
+    const onHide = () => {
+        fetchData();
+        setOpenData(false);
+    }
 
     const onSelected = async (value) => {
         setSelected(value)
@@ -141,7 +149,7 @@ const Location = (props) => {
                     onAddItem={() => setOpenForm(true)}
                 />
                 {openData ?
-                    <LocationSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                    <LocationSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={onHide} />
                     : null
                 }
 

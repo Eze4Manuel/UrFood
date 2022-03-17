@@ -52,6 +52,7 @@ const Dispatcher = (props) => {
             }
             if (reqData.status === 'ok') {
                 setData(reqData.data);
+                console.log(reqData.data);
             }
             setLoader(false);
         })()

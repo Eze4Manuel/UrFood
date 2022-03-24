@@ -169,7 +169,7 @@ const Dispatcher = (props) => {
                                     perPage={perPage}
                                     route="" // {config.pages.user}
                                     tableTitle="Dispatcher"
-                                    tableHeader={['#', 'ID', 'First Name', 'Last Name', 'Username', 'Phone']}
+                                    tableHeader={['#', 'ID', 'First Name', 'Last Name', 'Email', 'Phone']}
                                     dataFields={['_id', 'first_name', 'last_name', 'username','phone_number']}
                                 />
                             )

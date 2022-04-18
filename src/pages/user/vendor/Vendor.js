@@ -151,7 +151,6 @@ const Vendor = (props) => {
          setData(fQeury(d))
          await reload()
     }
-    console.log(data)
 
     return (
         <div className="main-content">

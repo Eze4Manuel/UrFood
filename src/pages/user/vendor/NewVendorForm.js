@@ -45,7 +45,7 @@ const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) =>
             if (reqData.status === "ok") {
                 console.log(reqData);
                 reqData.data.forEach((element, ind) => {
-                    _lazyItems[ind] = { label: `${element.display_name}`, value: `${element.display_name}` } 
+                    _lazyItems[ind] = { label: `${element.name}`, value: `${element.name}` } 
                 });
             }
             setLazyItems(_lazyItems);
@@ -53,37 +53,7 @@ const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) =>
         }, Math.random() * 1000 + 250);
     }
 
-    const areas = [
-        { name: 'Area 1', code: 'area 1' },
-        { name: 'Asokoro', code: 'asokoro' },
-        { name: 'Bamburu', code: 'bamburu' },
-        { name: 'Dawaki', code: 'dawaki' },
-        { name: 'Dustse alaji', code: 'dustse alaji' },
-        { name: 'Garki', code: 'garki' },
-        { name: 'Gwagwalada', code: 'gwagwalada' },
-        { name: 'Gwarinpa', code: 'gwarinpa' },
-        { name: 'Gudu', code: 'gudu' },
-        { name: 'Jabi', code: 'jabi' },
-        { name: 'Jikwoyi', code: 'jikwoyi' },
-        { name: 'Katampe', code: 'katampe' },
-        { name: 'Katampe extension', code: 'katampe extension' },
-        { name: 'Karshi', code: 'karshi' },
-        { name: 'Kubwa', code: 'kubwa' },
-        { name: 'Kurunduma', code: 'kurunduma' },
-        { name: 'Life camp', code: 'life camp' },
-        { name: 'Mararaba', code: 'mararaba' },
-        { name: 'Masaka', code: 'masaka' },
-        { name: 'Nyanya', code: 'nyanya' },
-        { name: 'Utako', code: 'utako' },
-        { name: 'Wuse', code: 'wuse' },
-        { name: 'Wuse 2', code: 'wuse 2' },
-        { name: 'Yoba', code: 'yoba' },
-        { name: 'Zone 2', code: 'zone 2' },
-        { name: 'Zone 4', code: 'zone 4' },
-        { name: 'Zone 5', code: 'zone 5' },
-        { name: 'Zone 6', code: 'zone 6' },
-        { name: 'Zuba', code: 'zuba' }
-    ];
+   
 
 
 
@@ -173,7 +143,7 @@ const NewVendorForm = (props = { onSubmit: null, onHide: null, show: false }) =>
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="area">Vendor Location Area*</label><br />
-                            <Dropdown  id="pharmacy_area" name="pharmacy_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                            <Dropdown  id="vendor_area" name="vendor_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
                                 lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
                                     return (
                                         <div className="flex align-items-center p-2" style={{ height: '38px' }}>

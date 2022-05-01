@@ -51,6 +51,7 @@ const Location = (props) => {
                     :
                     setData(reqData.data)
             }        
+            console.log(reqData.data);
     }
 
     // setup table data

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const ENV = 'staging'
+const ENV = 'live'
 
 const getURL = (env) => {
     
@@ -12,7 +12,7 @@ const getURL = (env) => {
         return 'https://urfood.appbuildtest.com/v1'
     }
 
-    return 'https://api.urfood.com/v1'
+    return 'https://api.urfood.ng/'
 }
 
 const uri = getURL(ENV)

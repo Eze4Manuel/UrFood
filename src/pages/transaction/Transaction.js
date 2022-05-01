@@ -85,8 +85,6 @@ const Transaction = (props) => {
             if (reqData.status === 'ok') {
                 setDispatchFee(reqData.data?.amount);
             }
-            console.log(reqData);
-
         })()
     }, [user?.token, set])
 

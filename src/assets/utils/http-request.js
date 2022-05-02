@@ -11,8 +11,7 @@ const getURL = (env) => {
     if (env === 'staging') {
         return 'https://urfood.appbuildtest.com/v1'
     }
-
-    return 'https://api.urfood.ng/'
+    return 'https://api.urfood.ng/v1'
 }
 
 const uri = getURL(ENV)
